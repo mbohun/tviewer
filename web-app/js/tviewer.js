@@ -36,8 +36,12 @@ function buildUrl() {
     return url;
 }
 var tviewer = {
-    init: function () {
-        var params = $.deparam.querystring(true);
+    serverUrl: null,
+    init: function (serverUrl) {
+        this.serverUrl = serverUrl;
+
+        var that = this,
+            params = $.deparam.querystring(true);
 
         // set search controls based on url params - !this must be done before binding events
         if (params.pageSize !== undefined) {
@@ -66,16 +70,32 @@ var tviewer = {
         });
 
         // wire lightbox for images
-        $('div.imageContainer').colorbox({
+        $('.imageContainer').colorbox({
             rel: 'list',
             opacity: 0.5,
-            html: function () {
-                var content = $(this).find('div').clone(false);
-                // need to clear max-width and max-height explicitly (seems to get written into element style somehow - cloning?)
-                $(content).find('img').removeClass('list').removeAttr('title').css('max-width','none').css('max-height','none'); // remove max size constraints & title
-                $(content).find('details').css('display','block'); // show details
-                return content;
+            inline: true,
+            onLoad:function () {
+                var $popup = $(this.hash),
+                    mdUrl = $popup.find('details').data('mdurl'),
+                    $title = $popup.find('span.title');
+
+                if ($title[0].innerText.trim() === "") {
+                    // add 'loading..' status
+                    $popup.find('dd').html('loading..');
+                    // load and inject metadata
+                    that.injectImageMetadata(mdUrl, this);
+                }
             }
         });
+    },
+    // asynchronous loading of image metadata
+    injectImageMetadata: function (mdUrl, box) {
+        $.getJSON(this.serverUrl + "/taxon/imageMetadataLookup", {url: mdUrl }, function (data) {
+            $(box.hash).find('dd.creator').html(data["http://purl.org/dc/elements/1.1/creator"]);
+            $(box.hash).find('dd.license').html(data["http://purl.org/dc/elements/1.1/license"]);
+            $(box.hash).find('dd.rights').html(data["http://purl.org/dc/elements/1.1/rights"]);
+            $(box).colorbox.resize();
+        });
     }
-}
+};
+

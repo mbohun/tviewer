@@ -62,7 +62,7 @@ table.taxonList span.rights {
     padding-bottom: 3px;
 }
 
-details {
+div.gContent {
     display: none;
 }
 

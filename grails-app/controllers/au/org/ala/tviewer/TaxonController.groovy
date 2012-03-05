@@ -148,6 +148,10 @@ class TaxonController {
                 [list: results.taxa, total: results.total, rank: targetRank, parentTaxa: taxon,
                 region: lookupRegion(search), start: start, pageSize: pageSize, query: query])
     }
+    
+    def imageMetadataLookup(String url) {
+        render webService.get(url)
+    }
 
     def bind(int search) {
         int s = search //params.search ?: 0

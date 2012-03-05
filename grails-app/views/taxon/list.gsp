@@ -68,13 +68,17 @@
                         <br/>not known
                     </g:else></td>
                     <!-- image -->
-                    <td><div rel="list" class="imageContainer">
+                    <td>
                         <g:if test="${i.image?.repoLocation && i.image?.repoLocation != 'null'}">
-                            <div>
-                                <img class="list" src="${i.image.repoLocation}" alt title="Click to view full size"/>
+                        <a rel="list" class="imageContainer" href="#${i.name}-popup">
+                          <img class="list" src="${i.image.repoLocation}" alt title="Click to view full size"/>
+                        </a>
+                        <div style="display: none">
+                            <div class="popupContent" id="${i.name}-popup">
+                                <img src="${i.image.repoLocation}" alt />
                                 <details open="open" data-mdurl="${i.image.metadata}">
-                                    <summary id="${i.name}">${i.name}
-                                    ${i.image?.title ? "(<em>${i.image?.title}</em>)" : ""}
+                                    <summary id="${i.name}-summary">${i.name}<span class="title">
+                                        ${i.image?.title ? "(<em>${i.image?.title}</em>)" : ""} </span>
                                     </summary>
                                     <dl>
                                         <dt>Image by</dt><dd class="creator">${i.image?.creator}</dd>
@@ -83,8 +87,9 @@
                                     </dl>
                                 </details>
                             </div>
+                        </div>
                         </g:if>
-                    </div></td>
+                    </td>
                     <!-- genera -->
                     <td>
                         <table class="genera">
@@ -95,14 +100,16 @@
                                 <td><div>
                                     <img class="thumb" src="${g.image?.repoLocation}"/>
                                     <a href="${ConfigurationHolder.config.bie.baseURL}/species/${g.name}">${g.name}</a>
-                                    <details open="open">
-                                        <summary id="${g.name}">${g.name} (<em>${g.image?.title}</em>)</summary>
-                                        <dl>
-                                            <dt>Image by</dt><dd class="creator">${g.image?.creator}</dd>
-                                            <dt>License</dt><dd class="license">${g.image?.license}</dd>
-                                            <dt>Rights</dt><dd class="rights">${g.image?.rights}</dd>
-                                        </dl>
-                                    </details>
+                                    <div class="gContent">
+                                        <details open="open">
+                                            <summary id="${g.name}">${g.name} (<em>${g.image?.title}</em>)</summary>
+                                            <dl>
+                                                <dt>Image by</dt><dd class="creator">${g.image?.creator}</dd>
+                                                <dt>License</dt><dd class="license">${g.image?.license}</dd>
+                                                <dt>Rights</dt><dd class="rights">${g.image?.rights}</dd>
+                                            </dl>
+                                        </details>
+                                    </div>
                                 </div></td>
                                 <g:if test="${count % 2 == 1 || count == i.genera.size()}">
                                     </tr>
@@ -125,6 +132,8 @@
         </section>
     </div>
     <script type="text/javascript">
+        var serverUrl = "${ConfigurationHolder.config.grails.serverURL}";
+
         $(document).ready(function () {
             var $toggleGenera = $('#toggleGenera'),
                 params = $.deparam.querystring(true);
@@ -184,7 +193,7 @@
                     "/taxon/species?taxa=" + checked;
                 }
             });
-            tviewer.init();
+            tviewer.init(serverUrl);
         });
     </script>
 </body>
