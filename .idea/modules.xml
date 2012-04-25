@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/tviewer.iml" filepath="$PROJECT_DIR$/tviewer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tviewer-grailsPlugins.iml" filepath="$PROJECT_DIR$/tviewer-grailsPlugins.iml" />
+    </modules>
+  </component>
+</project>
+
