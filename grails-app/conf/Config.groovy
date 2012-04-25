@@ -39,7 +39,7 @@ if (!spatial.layers.service.url) {
     spatial.layers.service.url = spatial.baseURL + "layers-service"
 }
 if (!headerAndFooter.baseURL) {
-    headerAndFooter.baseURL = "http://www2.ala.org.au/datasets"
+    headerAndFooter.baseURL = "http://www2.ala.org.au/commonui"
 }
 /******************************************************************************\
  *  SECURITY
@@ -98,24 +98,27 @@ grails.exceptionresolver.params.exclude = ['password']
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
-        grails.serverURL = "http://fish.ala.org.au"
+        grails.serverURL = "http://taxaexp.ala.org.au"
+        distribution.image.cache = "http://fish.ala.org.au/data/images"
         if (!results.cache.baseUrl) {
-            results.cache.baseUrl = "http://fish.ala.org.au/expert/results"
+            results.cache.baseUrl = "http://fish.ala.org.au/results"
         }
         if (!distribution.search.baseUrl) {
-            distribution.search.baseUrl = "http://fish.ala.org.au/expert/search"
+            distribution.search.baseUrl = "http://fish.ala.org.au/search"
         }
     }
     development {
-        //grails.host = "localhost"
-        grails.host = "woodfired.ala.org.au"
+        grails.host = "localhost"
+        //grails.host = "woodfired.ala.org.au"
         grails.serverURL = "http://${grails.host}:8082/${appName}"
+        distribution.image.cache = "http://${grails.host}/data/expert/images"
         results.cache.baseUrl = "http://${grails.host}:8081/expert/results"
         distribution.search.baseUrl = "http://${grails.host}:8081/expert/search"
     }
     test {
         grails.host = "ala-testweb1.vm.csiro.au"
         grails.serverURL = "http://${grails.host}:8080/${appName}"
+        distribution.image.cache = "http://${grails.host}/data/images"
         results.cache.baseUrl = "http://${grails.host}:8080/expert/results"
         distribution.search.baseUrl = "http://${grails.host}:8080/expert/search"
     }
@@ -133,7 +136,7 @@ log4j = {
     appenders {
         environments {
             production {
-                rollingFile name: "stacktrace", maxFileSize: 1024, file: "/var/log/tomcat6/tviewer-stacktrace.log"
+                rollingFile name: "stacktrace", maxFileSize: 1024, file: "/var/log/tomcat6/taxaexp-stacktrace.log"
             }
         }
     }
