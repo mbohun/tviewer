@@ -1,3 +1,7 @@
+body {
+    background-color: white;
+}
+
 .link {
     text-decoration: underline;
     cursor: pointer;
@@ -5,14 +9,26 @@
 
 /* layout table */
 
-table.taxonList {
+thead, thead th {
+    background-color: white;
+}
+
+th {
+    vertical-align: middle;
+}
+
+table.taxonList, table.taxonData {
     width: 100%;
     background-color: white;
 }
 
 table.taxonList td {
     text-align: left;
-    vertical-align: middle;
+}
+
+table.taxonList td.mainImage {
+    text-align: center;
+    width: 400px;
 }
 
 img.list {
@@ -22,7 +38,6 @@ img.list {
 
 img.dist {
     max-width: 200px;
-    max-height: 100px;
 }
 
 table.taxonList td:first-child {
@@ -33,23 +48,23 @@ table.genera td:first-child {
     text-align: left;
 }
 
-table.taxonList td:last-child, th:last-child {
-    padding-right: 15px;
-}
-
 table.taxonList > tbody > tr > td:nth-child(2) a {
     font-weight: bold;
 }
 
-table.taxonList > tbody > tr {
+table.taxonList > tbody > tr, table.taxonList > thead > tr {
     border-bottom: 3px solid #F0F0E8;/*#FaF9F2;*/
 }
+table.taxonData > tbody > tr, table.taxonList > thead > tr {
+    border-bottom: 1px solid #F0F0E8;/*#FaF9F2;*/
+}
+
 /*table.taxonList tr:nth-child(even) {
     background-color: #FaF9F2;
 }*/
 
 /* image */
-div.imageContainer {
+a.imageContainer {
     text-align: center;
 }
 
@@ -113,17 +128,20 @@ dt::after {
 
 #tlImage {
     text-align: center;
-    width: 30%;
+    width: 40%;
 }
 
 #tlGenera {
     width: 30%;
 }
 
-#toggleGenera {
-    float: right;
-    padding-right: 20px;
+/* for data table */
+#tdName {
+    width: 30%;
 }
+
+
+
 /* names */
 div.name {
     font-size: 16px;
@@ -139,6 +157,7 @@ div.common {
 img.thumb {
     max-width: 75px;
     max-height: 75px;
+    display: block;
 }
 
 table.genera {
@@ -148,17 +167,14 @@ table.genera {
 
 table.genera td {
     /*text-align: center;*/
-    padding: 0;
-}
-
-table.genera td a {
-    position: relative;
-    top: -10px;
+    padding: 0 10px 0 0;
 }
 
 /* pagination */
 #pagination ul {
     display: inline-block;
+    width: 90%;
+    text-align: center;
 }
 
 #pagination li {
@@ -195,7 +211,8 @@ li.currentPage {
 /* search controls */
 #controls {
     float: right;
-    padding-right: 10px;
+    padding: 2px 0;
+    /*width: 927%;*/
 }
 
 #controls label {
