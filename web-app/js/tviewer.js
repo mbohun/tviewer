@@ -3,7 +3,6 @@
  * User: markew
  * Date: 13/01/12
  * Time: 10:59 AM
- * To change this template use File | Settings | File Templates.
  */
 function buildUrl() {
     var params = $.deparam.querystring(true),
@@ -23,16 +22,9 @@ function buildUrl() {
     else {
         params.pageSize = pageSize;
     }
-    if (sortBy === 'name') {
-        delete params.sortBy;
-    }
-    else {
-        params.sortBy = sortBy;
-    }
+    params.sortBy = sortBy;
+
     url = $.param.querystring("", params);
-    if ($.bbq.getState('showGenera') === 'true') {
-        url = $.param.fragment(url, 'showGenera=true');
-    }
     return url;
 }
 var tviewer = {
@@ -54,12 +46,12 @@ var tviewer = {
             $('#sortOrder').val(params.sortOrder);
         }
 
-        // select all checkboxes
+        // wire selection of all checkboxes
         $('#selectAll').click(function () {
             $('input[type="checkbox"]').attr('checked','checked');
         });
 
-        // clear all checkboxes
+        // wire clearing of all checkboxes
         $('#clearAll').click(function () {
             $('input[type="checkbox"]').removeAttr('checked');
         });
@@ -70,22 +62,38 @@ var tviewer = {
         });
 
         // wire lightbox for images
-        $('.imageContainer').colorbox({
-            rel: 'list',
+        $('.imageContainer,.distributionImageContainer').colorbox({
             opacity: 0.5,
             inline: true,
             onLoad:function () {
                 var $popup = $(this.hash),
-                    mdUrl = $popup.find('details').data('mdurl'),
-                    $title = $popup.find('span.title');
+                    mdUrl = $popup.find('details').data('mdurl');
 
-                if ($title[0].innerText.trim() === "") {
+                if (mdUrl) {
                     // add 'loading..' status
                     $popup.find('dd').html('loading..');
                     // load and inject metadata
                     that.injectImageMetadata(mdUrl, this);
                 }
             }
+        });
+        // change main image on mouseover of genera images
+        $('img.thumb').on('mouseenter', function () {
+            var $mainImageTd = $(this).closest('table.genera').parent().prev(),
+                    $genusTd = $(this).parent().parent(),
+                    $mainImage = $mainImageTd.find('a.imageContainer img'),
+                    $popupContent = $mainImageTd.find('div.popupContent'),
+                    $popImage = $popupContent.find('img'),
+                    newImageSrc = $(this).attr('src'),
+                    mdUrl = $genusTd.find('details').data('mdurl');
+
+            // change the image src
+            $mainImage.attr('src',newImageSrc);
+            // change the popup img
+            $popImage.attr('src',newImageSrc);
+            // change the metadata url
+            $popupContent.find('details').data('mdurl', mdUrl);
+            that.injectImageMetadata(mdUrl, $(this).parent());
         });
     },
     // asynchronous loading of image metadata
