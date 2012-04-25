@@ -27,26 +27,10 @@ class ResultsService {
                 model.error = resp.error
             }
             else {
-                model = [key: key, query: resp.query, list: resp.list,
+                model = [key: key, query: resp.query, queryDescription: resp.queryDescription,
+                        list: resp.list,
                         facets: resp.facetResults, taxonHierarchy: resp.taxonHierarchy]
             }
-
-/*
-            withHttp(uri: grailsApplication.config.results.cache.baseUrl + '/') {
-                def query = [key: key, facets: 'family', includeFacetMembers: 'guid']
-                ['start','pageSize','sortBy','sortOrder'].each {
-                    if (params[it]) {query[it] = params[it]}
-                }
-                def resp = get(path: 'results/getPage', query: query)
-                println resp
-                //def data = JSON.parse(resp as String)
-                if (resp.error) {
-                    model.error = resp.error
-                }
-                else {
-                    model = [key: key, list: resp.list]
-                }
-            }*/
         }
         else {
             model.error = 'no key passed'
