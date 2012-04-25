@@ -87,7 +87,7 @@
         });
     </script>
 </head>
-<body class="species">
+<body class="${pageProperty(name:'body.class')} fish">
 
 <hf:banner logoutUrl="${ConfigurationHolder.config.grails.serverURL}/taxon/logout"/>
 
