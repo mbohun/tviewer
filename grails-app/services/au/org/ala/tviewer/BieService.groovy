@@ -2,79 +2,86 @@ package au.org.ala.tviewer
 
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import grails.converters.JSON
-import net.sf.json.JSONNull
 
 class BieService {
 
     def webService
 
-    def injectFamilyMetadata(list) {
-        // fill in known guids from local metadata 
-        // TODO: these should be supplied a in future service
-        /*list.each { family ->
-            if (!family.guid) {
-                family.guid = tempCache[family.name]?.guid ?: ""
-            }
-        }        
-        
-        // use bulk lookup on all known guids
-        def data = doBulkLookup(list.collect {it.guid})
-        println data*/
+    def injectGenusMetadata(list) {
 
-        list.each { family ->
-            def name = family.name
-            family.image
-            if (name && !family.CAABCode) {
-                family.CAABCode = lookupCAABCodeForFamily(name)
-            }
-            if (name && !family.common) {
-                family.common = lookupCommonNameForFamily(name)
-            }
-            if (name && !family.guid) {
-                family.guid = tempCache[name]?.guid ?: ""
+        // build a list of genus guids to lookup
+        def guids = []
+        list.each { fam ->
+            fam.genera.each { gen ->
+                if (gen.guid) {
+                    guids << gen.guid
+                }
             }
         }
+
+        // look up the metadata
+        def md = betterBulkLookup(guids)
+
+        // inject the metadata
+        list.each { fam ->
+            fam.genera.each { gen ->
+                def data = md[gen.guid]
+                if (data) {
+                    gen.common = data.common
+                    if (data.image && data.image.largeImageUrl?.toString() != "null") {
+                        gen.image = data.image
+                    }
+                }
+                else {
+                    println "No metadata found for genus ${gen.name} (guid = ${gen.guid})"
+                }
+            }
+        }
+
         return list
     }
 
-    def injectFullMetadata(list) {
-        def familyGuids = list.collect {it.guid}  // TODO: temp changes to use name
-        def genusGuids = list.each { fam ->
-            // add these when the genera data has guids
+    def injectSpeciesMetadata(list) {
+
+        // build a list of guids to lookup
+        def guids = []
+        list.each { sp ->
+            if (sp.guid) {
+                guids << sp.guid
+            }
         }
-        def guids = familyGuids.findAll {it}
 
-        // bulk lookup by guid
-        def data = doBulkLookup(guids)
+        // look up the metadata
+        def md = betterBulkLookup(guids)
 
-        list.each { fam ->
-            println "family: " + fam.name
-            def famData = data[fam.name.toUpperCase()]
-            if (famData) {
-                fam.common = famData.common
-                fam.image = famData.image
-                println "common: " + fam.common + " largeImageUrl: " + fam.image.repoLocation
+        // inject the metadata
+        list.each { sp ->
+            def data = md[sp.guid]
+            if (data) {
+                //sp.common = data.common  // don't override common name with name from bie as CMAR is more authoritative
+                if (data.image && data.image.largeImageUrl?.toString() != "null") {
+                    sp.image = data.image
+                }
             }
             else {
-                println "no data found"
+                println "No metadata found for species ${sp.name} (guid = ${sp.guid})"
             }
         }
+
         return list
     }
 
-    def doBulkLookup(list) {
-        def data = webService.doJsonPost(ConfigurationHolder.config.bie.baseURL,
-                "species/bulklookup.json", (list as JSON).toString())
+    def betterBulkLookup(list) {
+        def url = ConfigurationHolder.config.bie.baseURL + "/species/guids/bulklookup.json"
+        def data = webService.doPost(url, "", (list as JSON).toString())
         Map results = [:]
-        data.searchDTOList.each {family ->
-            def name = family.name
-            if (family.acceptedConceptName != 'null') { name = family.acceptedConceptName }
-            println "Name  = " + name
-            results.put name.toString().toUpperCase(), [common: family.commonNameSingle,
-                               guid: family.guid,
-                               image: [repoLocation: family.largeImageUrl,
-                                       thumbnail: family.thumbnailUrl,
-                                       metadata: family.imageMetadataUrl]]
+        data.resp.searchDTOList.each {item ->
+            results.put item.guid, [
+                   common: item.commonNameSingle,
+                   image: [largeImageUrl: item.largeImageUrl,
+                           smallImageUrl: item.smallImageUrl,
+                           thumbnailUrl: item.thumbnailUrl,
+                           imageMetadataUrl: item.imageMetadataUrl]]
         }
         return results
     }
