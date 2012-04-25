@@ -10,27 +10,31 @@
     <g:javascript library="jquery.colorbox-min"/>
     <g:javascript library="tviewer"/>
 </head>
-<body>
+<body class="landing">
 <header id="page-header">
     <div class="inner">
-        <nav id="breadcrumb"><ol><li><a href="${ConfigurationHolder.config.grails.serverURL}">Home</a></li> <li class="last"><i>search</i></li></ol></nav>
+        <nav id="breadcrumb"><ol>
+            <li><a href="${ConfigurationHolder.config.distribution.search.baseUrl}">Home</a></li>
+            <li><a href="${searchPage}">Search</a></li>
+            <li class="last"><i>results</i></li></ol>
+        </nav>
         <hgroup>
             <h1>Visual explorer - species list</h1>
-            <h2>Defined region: ${region ?: 'Australia'}</h2>
-            %{--<h2>Taxon group - ${parentTaxa[0].rank}: <em>${parentTaxa[0].name}</em></h2>--}%
+            <h2>Query: ${queryDescription ?: 'Australia'}</h2>
+            <p>Click on images to view at full size.</p>
         </hgroup>
     </div>
+</header>
+<div class="inner">
     <div id="controls">
         <label for="sortBy">Sort by:</label>
-        <g:select from="[[text:'Scientific name',id:'name'],[text:'Common name',id:'common'],[text:'CAAB code',id:'CAABCode']]"
+        <g:select from="[[text:'Family/genus/spp',id:'taxa'],[text:'Scientific name',id:'name'],[text:'Common name',id:'common'],[text:'CAAB code',id:'caabCode']]"
                   name="sortBy" optionKey="id" optionValue="text"/>
         <label for="sortOrder">Sort order:</label>
         <g:select from="['normal','reverse']" name="sortOrder"/>
         <label for="perPage">Results per page:</label>
         <g:select from="[5,10,20,50,100]" name="perPage" value="10"/>
     </div>
-</header>
-<div id="context">
     <table class="taxonList">
         <colgroup>
             <col id="tlCheckbox"> <!-- checkbox -->
@@ -39,36 +43,39 @@
             <col id="tlGenera"> <!-- genera -->
         </colgroup>
         <thead>
-        <tr><th></th><th>Scientific name<br/><span style="font-weight: normal;">CAAB code
+        <tr><th></th><th>Scientific name<br/><span style="font-weight: normal;">Family<br/>Common name<br/>CAAB code
             <a href="http://www.marine.csiro.au/caab/" class="external">more info</a></span></th>
-            <th>Sample image</th>
-            <th><span>Distribution</span></th></tr>
+            <th style="text-align: center;vertical-align: middle;">Representative image</th>
+            <th>Distribution</th></tr>
         </thead>
         <tbody>
         <g:each in="${list}" var="i">
             <tr>
                 <!-- checkbox -->
-                <td><input type="checkbox" alt="${i.guid}"/></td>
+                <td><input type="checkbox" id="${i.spcode}"  alt="${i.guid}"/></td>
                 <!-- name -->
                 <td><em><a href="${ConfigurationHolder.config.bie.baseURL}/species/${i.name}" title="Show ${rank} page">${i.name}</a></em>
                 <!-- common -->
                 <g:if test="${i.common && i.common.toString() != 'null'}">
-                    <br/>${i.common}
+                    <div class="common">${i.common}</div>
                 </g:if>
                 <!-- family -->
-                <br/>Family: ${i.family}
+                <div>Family: ${i.family}</div>
                 <!-- CAAB code -->
-                <g:if test="${i.CAABCode}">
-                    <br/>CAAB: <a href="http://www.marine.csiro.au/caabsearch/caab_search.family_listing?ctg=${i.CAABCode[0..1]}&fcde=${i.CAABCode[4..5]}"
-                            class="external" title="Lookup CAAB code">${i.CAABCode}</a>
+                <g:if test="${i.caabCode}">
+                    <div>CAAB: <a href="http://www.marine.csiro.au/caabsearch/caab_search.family_listing?ctg=${i.caabCode[0..1]}&fcde=${i.caabCode[4..5]}"
+                            class="external" title="Lookup CAAB code">${i.caabCode}</a></div>
                 </g:if></td>
                 <!-- image -->
-                <td><div rel="list" class="imageContainer">
-                    <g:if test="${i.image?.repoLocation}">
-                        <div>
-                            <img class="list" src="${i.image.repoLocation}" alt title="Click to view full size"/>
-                            <details open="open">
-                                <summary id="${i.name}">${i.name} (<em>${i.image?.title}</em>)</summary>
+                <td class="mainImage"><g:if test="${i.image?.largeImageUrl}">
+                    <a rel="list" class="imageContainer" href="#${i.name.replace(' ','_')}-popup">
+                        <img class="list" src="${i.image.largeImageUrl}" alt title="Click to view full size"/>
+                    </a>
+                    <div style="display: none">
+                        <div class="popupContent" id="${i.name.replace(' ','_')}-popup">
+                            <img src="${i.image.largeImageUrl}" alt />
+                            <details open="open" data-mdurl="${i.image.imageMetadataUrl}">
+                                <summary id="${i.name.replace(' ','_')}-summary"><strong><em>${i.name}</em></strong></summary>
                                 <dl>
                                     <dt>Image by</dt><dd class="creator">${i.image?.creator}</dd>
                                     <dt>License</dt><dd class="license">${i.image?.license}</dd>
@@ -76,24 +83,35 @@
                                 </dl>
                             </details>
                         </div>
-                    </g:if>
-                </div></td>
-                <!-- distribution -->
-                <td><div rel="dist" class="distributionImageContainer">
-                    <div>
-                        <g:if test="${i.distributionImage}">
-                            <img class="dist" src="${i.distributionImage.repo}" alt title="Click to view full size"/>
-                        </g:if>
                     </div>
-                </div></td>
+                </g:if></td>
+                <!-- distribution -->
+                <td><g:if test="${i.gidx}">
+                    <a rel="dist" class="distributionImageContainer" href="#${i.name.replace(' ','_')}-dist">
+                        <img class="dist" src="${ConfigurationHolder.config.distribution.image.cache}/dist${i.gidx}.png"
+                             alt title="Click for larger view"/>
+                    </a>
+                    <div style="display: none">
+                        <div class="popupContent" id="${i.name.replace(' ','_')}-dist">
+                            <img src="${ConfigurationHolder.config.distribution.image.cache}/dist${i.gidx}.png" alt width="400" height="400"/>
+                            <details open="open" style="padding-bottom: 10px;">
+                                <summary id="${i.name.replace(' ','_')}-distsummary"><strong><em>${i.name}</em></strong></summary>
+                            </details>
+                        </div>
+                    </div>
+                </g:if></td>
             </tr>
         </g:each>
         </tbody>
     </table>
     <section id="pagination">
-        <tv:paginate start="${start}" pageSize="${pageSize}" total="${total}" query="${query}"/>
+        <tv:paginate start="${start}" pageSize="${pageSize}" total="${total}"
+                     params="${[taxa:taxa,key:key,sortBy:sortBy,sortOrder:sortOrder]}"/>
         <p>
             Total <tv:pluraliseRank rank="species"/>: ${total}
+            <span class="link" id="speciesData">Show data table for checked <tv:pluraliseRank rank="${rank}"/></span>
+            <g:link style="padding-left:20px;" action="view" params="[key: key]">Show all results by family</g:link>
+            <g:link style="padding-left:20px;" action="data" params="[key: key]">Show data table for all species</g:link><br/>
             <button id="selectAll" type="button">Select all</button>
             <button id="clearAll" type="button">Clear all</button>
         </p>
@@ -101,19 +119,22 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        tviewer.init();
-
-        // wire lightbox for distribution images
-        $('div.distributionImageContainer').colorbox({
-            opacity: 0.5,
-            html: function () {
-                var content = $(this).find('div').clone(false);
-                // need to clear max-width and max-height explicitly (seems to get written into element style somehow - cloning?)
-                $(content).find('img').removeClass('list').removeAttr('title').css('max-width','none').css('max-height','none'); // remove max size constraints & title
-                $(content).find('details').css('display','block'); // show details
-                return content;
+        // wire link to species data
+        $('#speciesData').click(function () {
+            // collect the selected ranks
+            var checked = "";
+            $('input[type="checkbox"]:checked').each(function () {
+                checked += (checked === "" ? '' : ',') + $(this).attr('id');
+            });
+            if (checked === "") {
+                alert("No species selected");
+            }
+            else {
+                document.location.href = "${ConfigurationHolder.config.grails.serverURL}" +
+                        "/taxon/data?taxa=" + checked + "&key=${key}";
             }
         });
+        tviewer.init("${ConfigurationHolder.config.grails.serverURL}");
     });
 </script>
 </body>
