@@ -9,14 +9,18 @@ class TviewerTagLib {
      * @attr total number of items
      * @attr pageSize items per page
      * @attr start the first item to display
-     * @query option query to add to links
+     * @attr params other url params to be added if they have a value
      */
     def paginate = { attrs ->
+        //println attrs.params
         int total = attrs.total as int
         int pageSize = attrs.pageSize as int ?: 10
         def pageSizeParameter = pageSize == 10 ? "" : "&pageSize=${pageSize}"
         int start = attrs.start as int ?: 0
-        def query = attrs.query ?: "q=*"
+        def otherParams = ""
+        attrs.params.each { k,v ->
+            if (v) { otherParams += "&${k}=${v}" }
+        }
         //println "from ${start} to ${total} step ${pageSize}"
         if (total > pageSize) {
             out << "<ul>"
@@ -24,7 +28,7 @@ class TviewerTagLib {
                 out << "<li id='prevPage'>« Previous</li>"
             }
             else {
-                out << "<li id='prevPage'><a href='?${query}&start=${start-pageSize}${pageSizeParameter}'>« Previous</a></li>"
+                out << "<li id='prevPage'><a href='?start=${start-pageSize}${pageSizeParameter}${otherParams}'>« Previous</a></li>"
             }
             (0..total - 1).step(pageSize, {
                 int page = it == 0 ? 0 : it/pageSize
@@ -32,14 +36,14 @@ class TviewerTagLib {
                     out << "<li class='currentPage'>${page}</li>"
                 }
                 else {
-                    out << "<li><a href='?${query}&start=${it}${pageSizeParameter}'>${page}</a></li>"
+                    out << "<li><a href='?start=${it}${pageSizeParameter}${otherParams}'>${page}</a></li>"
                 }
             })
             if (start + pageSize >= total) {
                 out << "<li id='nextPage'>Next »</li>"
             }
             else {
-                out << "<li id='nextPage'><a href='?${query}&start=${start+pageSize}${pageSizeParameter}'>Next »</a></li>"
+                out << "<li id='nextPage'><a href='?start=${start+pageSize}${pageSizeParameter}${otherParams}'>Next »</a></li>"
             }
             out << "</ul>"
         }
@@ -60,5 +64,33 @@ class TviewerTagLib {
             default: plural = attrs.rank + 's'
         }
         out << plural
+    }
+
+    def displayPrimaryEcosystem = { attrs ->
+        def codes = attrs.codes
+        def text = []
+        if (codes =~ 'e') {
+            text << 'estuarine'
+        }
+        if (codes =~ 'c') {
+            text << 'coastal'
+        }
+        if (codes =~ 'd') {
+            text << 'demersal'
+        }
+        if (codes =~ 'p') {
+            text << 'pelagic'
+        }
+
+        out << text.join(', ')
+    }
+    
+    def notNull = { attrs, body ->
+        if (attrs.val) {
+            if (attrs.val.equals(null)) {
+                return ""
+            }
+            return body()
+        }
     }
 }
