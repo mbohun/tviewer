@@ -32,46 +32,18 @@ class TaxonController {
      * @param pageSize the number of items to display per page (optional defaults to 10)
      * @param sortBy the property to sort on (optional)
      * @param sortOrder normal or reverse (optional defaults to normal)
+     * @param debugModel
      *
      * @return model for a page of results
      */
     def view(String key) {
-        // retrieve the required page from the results cache
-        def data = resultsService.getResultsPage(key, "", "", true, params)
         
-        // inject enough metadata to all families to allow sorting and pagination
-        // these should ultimately be available in the initial search results
-        def results = bieService.injectFamilyMetadata(data.taxonHierarchy)
+        //params.each { println it }
 
-        // build family list - note this is currently done for all families regardless of pagination
-        // (so we can sort on derived properties) but should be made more efficient
-        /*def results = []
-        data.taxonHierarchy.each { family ->
-            def name = family.name
-            // get additional metadata for family from the bie
-            def bieMd = bieService.getBieMetadata(name, family.guid)
-//            def genera = bieService.getBulkBieMetadata(family.genera)
-            results << [
-                    name: name,
-                    guid: bieMd.guid,
-                    CAABCode: bieMd.CAABcode ?: tempCache[name]?.CAABCode,
-                    common: bieMd.common,
-                    image: *//*bieMd.image ?:*//* tempCache[name]?.preferredImage,
-                    genera: family.genera
-            ]
-        }*/
-        /*data.facets.find({it.fieldName == 'family'})?.fieldResult?.each { family ->
-            def name = family.label
-            // get additional metadata for family from the bie
-            def bieMd = bieLookup(name, 'Family')
-            results << [
-                    name: name,
-                    guid: bieMd.guid,
-                    CAABCode: tempCache[name]?.CAABCode,
-                    common: bieMd.common,
-                    image: tempCache[name]?.preferredImage
-            ]
-        }*/
+        // retrieve the required page from the results cache
+        def data = resultsService.getResultsPage(key, "", "", true, [:])
+        
+        def results = data.taxonHierarchy
 
         // sort by
         def sortBy = params.sortBy ?: 'name'
@@ -81,6 +53,7 @@ class TaxonController {
         if (params.sortOrder == 'reverse') {
             results = results.reverse()
         }
+
         // pagination
         def total = results.size()
         def start = params.start ? params.start as int : 0
@@ -90,15 +63,155 @@ class TaxonController {
         }
 
         // inject remaining metadata only for the families to be displayed
-        results = bieService.injectFullMetadata(results)
-        
-        //render results as JSON
-        render (view: 'list', model:
-                [list: results, total: total, rank: 'family', parentTaxa: "",
-                 region: data.query, start: start, pageSize: pageSize, query: "key=${key}",
-                 searchPage: ConfigurationHolder.config.distribution.search.baseUrl])
+        results = bieService.injectGenusMetadata(results)
+        //println results
+
+        def model = [list: results, total: total, rank: 'family', parentTaxa: "", key: key,
+                queryDescription: data.queryDescription, start: start, pageSize: pageSize,
+                sortBy: sortBy, sortOrder: params.sortOrder, query: data.query,
+                searchPage: ConfigurationHolder.config.distribution.search.baseUrl]
+
+        if (params.debugModel == 'true') {
+            render model as JSON
+        }
+        else {
+            render (view: 'list', model: model)
+        }
     }
 
+    /**
+     * Displays a paginated list of species for the results specified by the results key.
+     *
+     * @params key the identifier of the results set to display
+     * @params genus the name of a single genus to display (acts as a filter on the specified results)
+     * @param taxa a list of family names (as this stage), comma separated
+     * @param start the pagination index of the first taxon to display
+     * @param pageSize the number of taxa to display per page
+     * @param sortBy the column to sort on
+     * @param sortOrder normal or reverse
+     * @param debugModel
+     *
+     */
+    def species(String key, String genus) {
+
+        //params.each { println it }
+
+        // retrieve the required page from the results cache
+        def data = resultsService.getResultsPage(key, "", "", true, [:])
+        if (!data || data.error) {
+            render "No data " + data.error
+        }
+        else {
+            def results = data.list
+
+            // apply optional filter by genus
+            if (genus) {
+                results = results.findAll { it.genus == genus }
+            }
+
+            // sort by
+            def sortBy = params.sortBy ?: 'taxa'
+            /*if (sortBy == 'taxa') {
+                results.sort taxaSort
+            } else {
+                results.sort {it[sortBy]}
+            }*/
+            results.sort( sortBy == 'taxa' ? taxaSort : {it[sortBy]} )
+
+            // sort order
+            if (params.sortOrder == 'reverse') {
+                results = results.reverse()
+            }
+
+            // filter by taxa
+            if (params.taxa) {
+                results = filterList(results, params.taxa.tokenize(','))
+            }
+            
+            // pagination
+            def total = results.size()
+            def start = params.start ? params.start as int : 0
+            def pageSize = params.pageSize ? params.pageSize as int : 10
+            if (results) {
+                results = results[start..(Math.min(start + pageSize, total) - 1)]
+            }
+
+            // inject remaining metadata only for species to be displayed
+            results = bieService.injectSpeciesMetadata(results)
+
+            //println results
+            def model = [list: results, total: total, taxa: params.taxa, start: start, key: key,
+                    queryDescription: data.queryDescription, pageSize: pageSize, sortBy: sortBy,
+                    sortOrder: params.sortOrder, query: data.list.query, rank: 'species',
+                    searchPage: ConfigurationHolder.config.distribution.search.baseUrl]
+
+            if (params.debugModel == 'true') {
+                render model as JSON
+            }
+            else {
+                render (view: 'species', model: model)
+            }
+        }
+    }
+
+    /**
+     * Displays a paginated list of species for the results specified by the results key.
+     *
+     * @params key the identifier of the results set to display
+     * @param taxa a list of species names, comma separated
+     * @param sortBy the column to sort on
+     * @param sortOrder normal or reverse
+     * @param debugModel
+     */
+    def data(String key) {
+
+        //params.each { println it }
+
+        // retrieve the required page from the results cache
+        def data = resultsService.getResultsPage(key, "", "", true, [:])
+        if (!data || data.error) {
+            render "No data " + data.error
+        }
+        else {
+            def results = data.list
+
+            // sort by
+            def sortBy = params.sortBy ?: 'taxa'
+            results.sort( sortBy == 'taxa' ? taxaSort : {it[sortBy]} )
+
+            // sort order
+            if (params.sortOrder == 'reverse') {
+                results = results.reverse()
+            }
+
+            // filter by taxa
+            if (params.taxa) {
+                def filters = params.taxa.tokenize(',')
+                results = results.findAll { it.spcode.toString() in filters }
+            }
+
+            def model = [list: results, total: results.size(), taxa: params.taxa, key: key,
+                    queryDescription: data.queryDescription, sortBy: sortBy,
+                    sortOrder: params.sortOrder, query: data.list.query,
+                    searchPage: ConfigurationHolder.config.distribution.search.baseUrl]
+
+            if (params.debugModel == 'true') {
+                render model as JSON
+            }
+            else {
+                render (view: 'data', model: model)
+            }
+        }
+    }
+
+    def taxaSort = { a,b ->
+        (a.family <=> b.family) ?: (a.genus <=> b.genus) ?: (a.name <=> b.name)
+    }
+
+    def filterList(list, filters) {
+        return list.findAll {it.family in filters}
+    }
+    
     /**
      * Displays a paginated list of taxa at the specified rank for the specified query.
      *
@@ -194,26 +307,6 @@ class TaxonController {
         }
     }
 
-    /**
-     * Displays a paginated list of species for the specified list of taxa.
-     *
-     * @param taxa a list of family names (as this stage), comma separated
-     * @param start the pagination index of the first taxon to display
-     * @param pageSize the number of taxa to display per page
-     * @param sortBy the column to sort on
-     * @param sortOrder normal or reverse
-     *
-     */
-    def species = {
-        def list = params.taxa ? params.taxa.tokenize(',') : []
-        def start = params.start ? params.start as int : 0
-        def pageSize = params.pageSize ? params.pageSize as int : 10
-        def query = ""
-
-        [list: speciesData.Lamnidae, total: speciesData.Lamnidae.size(), taxa: params.taxa, start: start,
-                pageSize: pageSize, query: query]
-    }
-    
     def listTargetRankFromSearch(search, targetRank, start, pageSize) {
         def query = ""
         switch (search) {
@@ -855,7 +948,7 @@ class TaxonController {
                              license: 'Creative Common Attribution 3.0 Australia',
                              rights: 'Australian National Fish Collection, CSIRO, Image enhancement funded by CSIRO/FRDC',
                              creator: 'Australian National Fish Collection, CSIRO'],
-                     distributionImage: [repoLocation: 'http://bie.ala.org.au/repo/1011/38/382186/raw.png',
+                     distributionImage: [repo: 'http://spatial.ala.org.au/geoserver/ALA/wms?service=WMS&version=1.1.0&request=GetMap&layers=ALA:aus1,ALA:Distributions&styles=&bbox=110,-55,161,-7&srs=EPSG:4326&format=image/png&viewparams=s:1083',
                              license: null,
                              rights: null,
                              creator: null]],
@@ -868,13 +961,10 @@ class TaxonController {
                              license: 'Creative Common Attribution 3.0 Australia',
                              rights: 'Australian National Fish Collection, CSIRO, Image enhancement funded by CSIRO/FRDC',
                              creator: 'Australian National Fish Collection, CSIRO'],
-                            distributionImage: [repoLocation:
- 'http://spatial.ala.org.au/geoserver/wms?service=WMS&version=1.1.0&request=GetMap'+
- '&layers=ALA:Distributions&format=image/png&viewparams=s:216&WIDTH=200&HEIGHT=100'+
- '&BBOX=11703635,-5611385,18063196,-1012934',
-                                    license: null,
-                                    rights: null,
-                                    creator: null]],
+                    distributionImage: [repo: 'http://spatial.ala.org.au/geoserver/ALA/wms?service=WMS&version=1.1.0&request=GetMap&layers=ALA:aus1,ALA:Distributions&styles=&bbox=110,-55,161,-7&srs=EPSG:4326&format=image/png&viewparams=s:216',
+                            license: null,
+                            rights: null,
+                            creator: null]],
                     [name: 'Isurus paucus',
                      guid: 'urn:lsid:biodiversity.org.au:afd.taxon:88390b35-784a-4e55-ab24-48f401d331d2',
                      common:  'Longfin Mako',
@@ -883,7 +973,11 @@ class TaxonController {
                      image: [repoLocation: 'http://bie.ala.org.au/repo/1111/174/1740589/raw.jpg',
                              license: 'Creative Common Attribution 3.0 Australia',
                              rights: 'Australian National Fish Collection',
-                             creator: 'Australian National Fish Collection, CSIRO']],
+                             creator: 'Australian National Fish Collection, CSIRO'],
+                    distributionImage: [repo: 'http://spatial.ala.org.au/geoserver/ALA/wms?service=WMS&version=1.1.0&request=GetMap&layers=ALA:aus1,ALA:Distributions&styles=&bbox=110,-55,161,-7&srs=EPSG:4326&format=image/png&viewparams=s:212',
+                            license: null,
+                            rights: null,
+                            creator: null]],
                     [name: 'Lamna nasus',
                      guid: 'urn:lsid:biodiversity.org.au:afd.taxon:f57b6325-e2ca-4cc1-8813-ec7a26f0f50a',
                      common:  'Mackerel Shark',
@@ -892,7 +986,11 @@ class TaxonController {
                      image: [repoLocation: 'http://bie.ala.org.au/repo/1111/174/1740716/raw.jpg',
                              license: 'Creative Common Attribution 3.0 Australia',
                              rights: 'Australian National Fish Collection, CSIRO, Image enhancement funded by CSIRO/FRDC',
-                             creator: 'Australian National Fish Collection, CSIRO']]/*,
+                             creator: 'Australian National Fish Collection, CSIRO'],
+                    distributionImage: [repo: 'http://spatial.ala.org.au/geoserver/ALA/wms?service=WMS&version=1.1.0&request=GetMap&layers=ALA:aus1,ALA:Distributions&styles=&bbox=110,-55,161,-7&srs=EPSG:4326&format=image/png&viewparams=s:234',
+                            license: null,
+                            rights: null,
+                            creator: null]]/*
                     [name: '',
                      guid: '',
                      common:  '',
