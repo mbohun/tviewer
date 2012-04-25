@@ -48,16 +48,22 @@ class WebService {
         }
     }
 
-    def doJsonPost(String url, String path, String postBody) {
-        println "post = " + postBody
+    @Deprecated
+    // this parses the response using a non-grails json parser that injects JSONNull that are
+    // not handled well by the grails json converter - use doPost()
+    def doJsonPost(String url, String path, String port, String postBody) {
+        //println "post = " + postBody
         def http = new HTTPBuilder(url)
         http.request( groovyx.net.http.Method.POST, groovyx.net.http.ContentType.JSON ) {
             uri.path = path
+            if (port) {
+                uri.port = port as int
+            }
             body = postBody
             requestContentType = ContentType.URLENC
 
             response.success = { resp, json ->
-                println "bulk lookup = " + json
+                //println "bulk lookup = " + json
                 return json
             }
 
@@ -67,6 +73,33 @@ class WebService {
                 return error
             }
         }
+    }
 
+    def doPost(String url, String port, String postBody) {
+        def conn = new URL(url).openConnection()
+        try {
+            conn.setDoOutput(true)
+            conn.setRequestProperty("Content-Type", "application/json");
+            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream())
+            wr.write(postBody)
+            wr.flush()
+            BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line;
+            def resp = ""
+            while ((line = rd.readLine()) != null) {
+                resp += line
+            }
+            rd.close()
+            wr.close()
+            return [error:  null, resp: JSON.parse(resp)]
+        } catch (SocketTimeoutException e) {
+            def error = [error: "Timed out calling web service. URL= \${url}."]
+            println error.error
+            return error as JSON
+        } catch (Exception e) {
+            def error = [error: "Failed calling web service. ${e.getClass()} ${e.getMessage()} ${e} URL= ${url}."]
+            println error.error
+            return error as JSON
+        }
     }
 }
