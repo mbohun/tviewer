@@ -66,6 +66,12 @@ class TviewerTagLib {
         out << plural
     }
 
+    def removeSpaces = { attrs ->
+        if (attrs.str) {
+            out << attrs.str.tokenize(' ').join()
+        }
+    }
+
     def displayPrimaryEcosystem = { attrs ->
         def codes = attrs.codes
         def text = []

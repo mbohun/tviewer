@@ -63,7 +63,7 @@
                 <div>Family: ${i.family}</div>
                 <!-- CAAB code -->
                 <g:if test="${i.caabCode}">
-                    <div>CAAB: <a href="http://www.marine.csiro.au/caabsearch/caab_search.family_listing?ctg=${i.caabCode[0..1]}&fcde=${i.caabCode[4..5]}"
+                    <div>CAAB: <a href="http://www.marine.csiro.au/caabsearch/caab_search.caab_report?spcode=${tv.removeSpaces(str:i.caabCode)}"
                             class="external" title="Lookup CAAB code">${i.caabCode}</a></div>
                 </g:if></td>
                 <!-- image -->
