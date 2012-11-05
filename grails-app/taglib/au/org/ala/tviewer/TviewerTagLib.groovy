@@ -1,5 +1,7 @@
 package au.org.ala.tviewer
 
+import org.codehaus.groovy.grails.web.json.JSONObject
+
 class TviewerTagLib {
     static namespace = "tv"
 
@@ -93,7 +95,7 @@ class TviewerTagLib {
     
     def notNull = { attrs, body ->
         if (attrs.val) {
-            if (attrs.val.equals(null)) {
+            if (attrs.val==JSONObject.NULL) {
                 return ""
             }
             return body()
