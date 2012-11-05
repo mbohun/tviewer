@@ -1,4 +1,4 @@
-<%@ page import="org.codehaus.groovy.grails.commons.ConfigurationHolder" contentType="text/html;charset=UTF-8" %>
+<%@ page import="org.codehaus.groovy.grails.web.json.JSONObject; org.codehaus.groovy.grails.commons.ConfigurationHolder" contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,25 +66,28 @@
                     </g:if>
                     <!-- image -->
                     <td class="mainImage">
-                        %{--<tv:notNull val="${i.image}">--}%
+                        <g:set var="largeImageUrl" value="${i.image==JSONObject.NULL ? '' : i.image?.largeImageUrl}"/>
+                        <g:set var="imageMetadataUrl" value="${i.image==JSONObject.NULL ? '' : i.image?.imageMetadataUrl}"/>
+                        <g:set var="creator" value="${i.image==JSONObject.NULL ? '' : i.image?.creator}"/>
+                        <g:set var="license" value="${i.image==JSONObject.NULL ? '' : i.image?.license}"/>
+                        <g:set var="rights" value="${i.image==JSONObject.NULL ? '' : i.image?.rights}"/>
                         <a rel="list" class="imageContainer" href="#${i.name}-popup">
-                          <img class="list" src="${i.image.largeImageUrl}" alt title="Click to view full size"/>
+                          <img class="list" src="${largeImageUrl}" alt title="Click to view full size"/>
                         </a>
                         <div style="display: none">
                             <div class="popupContent" id="${i.name}-popup">
-                                <img src="${i.image.largeImageUrl}" alt />
-                                <details open="open" data-mdurl="${i.image.imageMetadataUrl}">
+                                <img src="${largeImageUrl}" alt />
+                                <details open="open" data-mdurl="${imageMetadataUrl}">
                                     <summary id="${i.name}-summary">${i.name}
                                     </summary>
                                     <dl>
-                                        <dt>Image by</dt><dd class="creator">${i.image?.creator}</dd>
-                                        <dt>License</dt><dd class="license">${i.image?.license}</dd>
-                                        <dt>Rights</dt><dd class="rights">${i.image?.rights}</dd>
+                                        <dt>Image by</dt><dd class="creator">${creator}</dd>
+                                        <dt>License</dt><dd class="license">${license}</dd>
+                                        <dt>Rights</dt><dd class="rights">${rights}</dd>
                                     </dl>
                                 </details>
                             </div>
                         </div>
-                        %{--</tv:notNull>--}%
                     </td>
                     <!-- genera -->
                     <td>
