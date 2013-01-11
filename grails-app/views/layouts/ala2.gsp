@@ -91,8 +91,6 @@
 
 <hf:banner logoutUrl="${ConfigurationHolder.config.grails.serverURL}/taxon/logout"/>
 
-<hf:menu/>
-
 <g:layoutBody />
 
 <hf:footer/>
