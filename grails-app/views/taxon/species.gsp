@@ -10,19 +10,18 @@
     <g:javascript library="jquery.colorbox-min"/>
     <g:javascript library="tviewer"/>
 </head>
-<body class="landing">
+<body class="species-list">
 <header id="page-header">
     <div class="inner">
-        <nav id="breadcrumb"><ol>
-            <li><a href="${ConfigurationHolder.config.distribution.search.baseUrl}">Home</a></li>
-            <li><a href="${searchPage}">Search</a></li>
-            <li class="last"><i>results</i></li></ol>
-        </nav>
         <hgroup>
             <h1>Visual explorer - species list</h1>
             <h2>Query: ${queryDescription ?: 'Australia'}</h2>
             <p>Click on images to view at full size.</p>
         </hgroup>
+        <nav id="breadcrumb"><ol>
+            <li><a href="${searchPage}">Search</a></li>
+            <li class="last"><i>Results by species</i></li></ol>
+        </nav>
     </div>
 </header>
 <div class="inner">

@@ -9,18 +9,17 @@
     <g:javascript library="jquery.ba-bbq.min"/>
     <g:javascript library="tviewer"/>
 </head>
-<body class="landing">
+<body class="species-data">
 <header id="page-header">
     <div class="inner">
-        <nav id="breadcrumb"><ol>
-            <li><a href="${ConfigurationHolder.config.distribution.search.baseUrl}">Home</a></li>
-            <li><a href="${searchPage}">Search</a></li>
-            <li class="last"><i>results</i></li></ol>
-        </nav>
         <hgroup>
             <h1>Data explorer - species data</h1>
             <h2>Query: ${queryDescription ?: 'Australia'}</h2>
         </hgroup>
+        <nav id="breadcrumb"><ol>
+            <li><a href="${searchPage}">Search</a></li>
+            <li class="last"><i>Results as data table</i></li></ol>
+        </nav>
     </div>
 </header>
 <div class="inner">
