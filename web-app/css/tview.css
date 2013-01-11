@@ -7,6 +7,35 @@ body {
     cursor: pointer;
 }
 
+/* banners */
+.family-list #page-header hgroup {
+    background: url("../images/fishmap-banner­family-list.jpg") white center no-repeat;
+}
+
+.species-list #page-header hgroup {
+    background: url("../images/fishmap-banner­species-list.jpg") white center no-repeat;
+}
+
+.species-data #page-header hgroup {
+    background: url("../images/fishmap-banner­species-data.jpg") white center no-repeat;
+}
+
+#page-header hgroup {
+    height: 136px;
+    color: transparent;  /* only for text readers - visual title is in the banner image */
+}
+
+#page-header .inner {
+    padding-top: 0;
+}
+
+#breadcrumb {
+    margin-top: -15px;
+    color: #007c84;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
 /* layout table */
 
 thead, thead th {
