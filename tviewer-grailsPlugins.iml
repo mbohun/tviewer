@@ -26,7 +26,7 @@
     <content url="file://$USER_HOME$/.grails/2.1.0/projects/tviewer/plugins/tomcat-2.1.0" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="grails-2.1.0" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="grails-2.1.2" level="application" />
     <orderEntry type="module-library" exported="">
       <library name="Grails User Library (tviewer-grailsPlugins)">
         <CLASSES>

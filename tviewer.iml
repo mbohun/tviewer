@@ -64,8 +64,8 @@
     </orderEntry>
     <orderEntry type="library" name="grails-2.0.0" level="application" />
     <orderEntry type="library" name="ala-cas-client" level="project" />
-    <orderEntry type="library" name="grails-2.1.0" level="application" />
     <orderEntry type="module" module-name="tviewer-grailsPlugins" />
+    <orderEntry type="library" name="grails-2.1.2" level="application" />
   </component>
 </module>
 
