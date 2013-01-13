@@ -9,15 +9,15 @@ body {
 
 /* banners */
 .family-list #page-header hgroup {
-    background: url("../images/fishmap-banner­family-list.jpg") white center no-repeat;
+    background: url("../images/fishmap-banner-family-list.jpg") white center no-repeat;
 }
 
 .species-list #page-header hgroup {
-    background: url("../images/fishmap-banner­species-list.jpg") white center no-repeat;
+    background: url("../images/fishmap-banner-species-list.jpg") white center no-repeat;
 }
 
 .species-data #page-header hgroup {
-    background: url("../images/fishmap-banner­species-data.jpg") white center no-repeat;
+    background: url("../images/fishmap-banner-species-data.jpg") white center no-repeat;
 }
 
 #page-header hgroup {
