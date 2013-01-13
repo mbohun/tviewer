@@ -21,6 +21,7 @@
       <configuration>
         <datasource-map>
           <unit-entry name="Gorm" />
+          <unit-entry name="sessionFactory" />
         </datasource-map>
       </configuration>
     </facet>
@@ -62,8 +63,6 @@
         <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="grails-2.0.0" level="application" />
-    <orderEntry type="library" name="ala-cas-client" level="project" />
     <orderEntry type="module" module-name="tviewer-grailsPlugins" />
     <orderEntry type="library" name="grails-2.1.2" level="application" />
   </component>
