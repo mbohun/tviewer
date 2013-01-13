@@ -1,4 +1,3 @@
-<%@ page import="org.codehaus.groovy.grails.commons.ConfigurationHolder" contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,9 +5,7 @@
     <meta name="layout" content="ala2"/>
     <link rel="stylesheet" type="text/css" media="screen" href="${resource(dir:'css',file:'tview.css')}" />
     <link rel="stylesheet" type="text/css" media="screen" href="${resource(dir:'css',file:'colorbox.css')}" />
-    <g:javascript library="jquery.ba-bbq.min"/>
-    <g:javascript library="jquery.colorbox-min"/>
-    <g:javascript library="tviewer"/>
+    <r:require module="application"/>
 </head>
 <body class="species-list">
 <header id="page-header">
@@ -53,7 +50,7 @@
                 <!-- checkbox -->
                 <td><input type="checkbox" id="${i.spcode}"  alt="${i.guid}"/></td>
                 <!-- name -->
-                <td><em><a href="${ConfigurationHolder.config.bie.baseURL}/species/${i.name}" title="Show ${rank} page">${i.name}</a></em>
+                <td><em><a href="${grailsApplication.config.bie.baseURL}/species/${i.name}" title="Show ${rank} page">${i.name}</a></em>
                 <!-- common -->
                 <g:if test="${i.common && i.common.toString() != 'null'}">
                     <div class="common">${i.common}</div>
@@ -87,12 +84,12 @@
                 <!-- distribution -->
                 <td><g:if test="${i.gidx}">
                     <a rel="dist" class="distributionImageContainer" href="#${i.name.replace(' ','_')}-dist">
-                        <img class="dist" src="${ConfigurationHolder.config.distribution.image.cache}/dist${i.gidx}.png"
+                        <img class="dist" src="${grailsApplication.config.distribution.image.cache}/dist${i.gidx}.png"
                              alt title="Click for larger view"/>
                     </a>
                     <div style="display: none">
                         <div class="popupContent" id="${i.name.replace(' ','_')}-dist">
-                            <img src="${ConfigurationHolder.config.distribution.image.cache}/dist${i.gidx}.png" alt width="400" height="400"/>
+                            <img src="${grailsApplication.config.distribution.image.cache}/dist${i.gidx}.png" alt width="400" height="400"/>
                             <details open="open" style="padding-bottom: 10px;">
                                 <summary id="${i.name.replace(' ','_')}-distsummary"><strong><em>${i.name}</em></strong></summary>
                             </details>
@@ -129,11 +126,11 @@
                 alert("No species selected");
             }
             else {
-                document.location.href = "${ConfigurationHolder.config.grails.serverURL}" +
+                document.location.href = "${grailsApplication.config.grails.serverURL}" +
                         "/taxon/data?taxa=" + checked + "&key=${key}";
             }
         });
-        tviewer.init("${ConfigurationHolder.config.grails.serverURL}");
+        tviewer.init("${grailsApplication.config.grails.serverURL}");
     });
 </script>
 </body>

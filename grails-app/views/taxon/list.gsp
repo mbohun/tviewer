@@ -1,4 +1,4 @@
-<%@ page import="org.codehaus.groovy.grails.web.json.JSONObject; org.codehaus.groovy.grails.commons.ConfigurationHolder" contentType="text/html;charset=UTF-8" %>
+<%@ page import="org.codehaus.groovy.grails.web.json.JSONObject" contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,9 +6,7 @@
   <meta name="layout" content="ala2"/>
   <link rel="stylesheet" type="text/css" media="screen" href="${resource(dir:'css',file:'tview.css')}" />
   <link rel="stylesheet" type="text/css" media="screen" href="${resource(dir:'css',file:'colorbox.css')}" />
-  <g:javascript library="jquery.ba-bbq.min"/>
-  <g:javascript library="jquery.colorbox-min"/>
-  <g:javascript library="tviewer"/>
+  <r:require module="application"/>
 </head>
 <body class="family-list">
 <header id="page-header">
@@ -53,7 +51,7 @@
                     <!-- checkbox -->
                     <td><input type="checkbox" id="${i.name}" alt="${i.guid}"/></td>
                     <!-- name -->
-                    <td><div class="name"><a href="${ConfigurationHolder.config.bie.baseURL}/species/${i.name}" title="Show ${rank} page">${i.name}</a></div>
+                    <td><div class="name"><a href="${grailsApplication.config.bie.baseURL}/species/${i.name}" title="Show ${rank} page">${i.name}</a></div>
                     <!-- common name -->
                     <g:if test="${i.common && i.common.toString() != 'null'}">
                         <div class="common">${i.common}</div>
@@ -142,8 +140,8 @@
             </p>
         </section>
     </div>
-    <script type="text/javascript">
-        var serverUrl = "${ConfigurationHolder.config.grails.serverURL}";
+    <r:script>
+        var serverUrl = "${grailsApplication.config.grails.serverURL}";
 
         $(document).ready(function () {
             // wire link to species list
@@ -158,12 +156,13 @@
                 }
                 else {
                     if (this.id === 'speciesData') { which = 'data' }
-                    document.location.href = "${ConfigurationHolder.config.grails.serverURL}" +
+                    document.location.href = "${grailsApplication.config.grails.serverURL}" +
                     "/taxon/" + which + "?taxa=" + checked + "&key=${key}";
                 }
             });
             tviewer.init(serverUrl);
         });
-    </script>
+    </r:script>
+    <r:layoutResources/>
 </body>
 </html>

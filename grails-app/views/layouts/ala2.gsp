@@ -1,4 +1,3 @@
-<%@ page import="org.codehaus.groovy.grails.commons.ConfigurationHolder" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,11 +13,6 @@
     <link rel="stylesheet" type="text/css" media="screen" href="http://ala.org.au/wp-content/themes/ala2011/css/sf.css" />
     <script language="JavaScript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 
-    <!--[if lt IE 9]>
-        <g:javascript library="html5" />
-    <![endif]-->
-
-    <g:javascript library="application" />
     <g:layoutHead />
     <script language="JavaScript" type="text/javascript" src="http://ala.org.au/wp-content/themes/ala2011/scripts/superfish/superfish.js"></script>
     <script language="JavaScript" type="text/javascript" src="http://ala.org.au/wp-content/themes/ala2011/scripts/jquery.autocomplete.js"></script>
@@ -86,10 +80,12 @@
             });
         });
     </script>
+    <r:require module="html5" />
+    <r:layoutResources/>
 </head>
 <body class="${pageProperty(name:'body.class')} fish">
 
-<hf:banner logoutUrl="${ConfigurationHolder.config.grails.serverURL}/taxon/logout"/>
+<hf:banner logoutUrl="${grailsApplication.config.grails.serverURL}/taxon/logout"/>
 
 <g:layoutBody />
 

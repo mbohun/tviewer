@@ -1,4 +1,3 @@
-<%@ page import="org.codehaus.groovy.grails.commons.ConfigurationHolder" contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,8 +5,7 @@
     <meta name="layout" content="ala2"/>
     <link rel="stylesheet" type="text/css" media="screen" href="${resource(dir:'css',file:'tview.css')}" />
     <link rel="stylesheet" type="text/css" media="screen" href="${resource(dir:'css',file:'colorbox.css')}" />
-    <g:javascript library="jquery.ba-bbq.min"/>
-    <g:javascript library="tviewer"/>
+    <r:require module="application"/>
 </head>
 <body class="species-data">
 <header id="page-header">
@@ -57,7 +55,7 @@
                 <!-- family -->
                 <td>${i.family}</td>
                 <!-- name -->
-                <td><em><a href="${ConfigurationHolder.config.bie.baseURL}/species/${i.name}" title="Show ${rank} page">${i.name}</a></em></td>
+                <td><em><a href="${grailsApplication.config.bie.baseURL}/species/${i.name}" title="Show ${rank} page">${i.name}</a></em></td>
                 <!-- common -->
                 <td>${i.common}</td>
                 <!-- group -->
@@ -80,7 +78,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        tviewer.init("${ConfigurationHolder.config.grails.serverURL}");
+        tviewer.init("${grailsApplication.config.grails.serverURL}");
     });
 </script>
 </body>
