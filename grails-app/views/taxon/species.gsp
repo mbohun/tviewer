@@ -3,8 +3,6 @@
 <head>
     <title>Taxon list</title>
     <meta name="layout" content="ala2"/>
-    <link rel="stylesheet" type="text/css" media="screen" href="${resource(dir:'css',file:'tview.css')}" />
-    <link rel="stylesheet" type="text/css" media="screen" href="${resource(dir:'css',file:'colorbox.css')}" />
     <r:require module="application"/>
 </head>
 <body class="species-list">
@@ -24,8 +22,8 @@
 <div class="inner">
     <div id="controls">
         <label for="sortBy">Sort by:</label>
-        <g:select from="[[text:'Family/genus/spp',id:'taxa'],[text:'Scientific name',id:'name'],[text:'Common name',id:'common'],[text:'CAAB code',id:'caabCode']]"
-                  name="sortBy" optionKey="id" optionValue="text"/>
+        <g:select from="[[text:'Scientific name',id:'name'],[text:'Common name',id:'common'],[text:'Family/genus/spp',id:'taxa'],[text:'CAAB code',id:'caabCode']]"
+                  name="sortBy" optionKey="id" optionValue="text" value="taxa"/>
         <label for="sortOrder">Sort order:</label>
         <g:select from="['normal','reverse']" name="sortOrder"/>
         <label for="perPage">Results per page:</label>
@@ -39,7 +37,7 @@
             <col id="tlGenera"> <!-- genera -->
         </colgroup>
         <thead>
-        <tr><th></th><th>Scientific name<br/><span style="font-weight: normal;">Family<br/>Common name<br/>CAAB code
+        <tr><th></th><th>Scientific name<br/><span style="font-weight: normal;">Common name<br/>Family<br/>CAAB code
             <a href="http://www.marine.csiro.au/caab/" class="external">more info</a></span></th>
             <th style="text-align: center;vertical-align: middle;">Representative image</th>
             <th>Distribution</th></tr>
@@ -72,11 +70,9 @@
                             <img src="${i.image.largeImageUrl}" alt />
                             <details open="open" data-mdurl="${i.image.imageMetadataUrl}">
                                 <summary id="${i.name.replace(' ','_')}-summary"><strong><em>${i.name}</em></strong></summary>
-                                <dl>
-                                    <dt>Image by</dt><dd class="creator">${i.image?.creator}</dd>
-                                    <dt>License</dt><dd class="license">${i.image?.license}</dd>
-                                    <dt>Rights</dt><dd class="rights">${i.image?.rights}</dd>
-                                </dl>
+                                <div><span class="dt">Image by:</span><span class="creator">${i.image?.creator}</span></div>
+                                <div><span class="dt">License:</span><span class="license">${i.image?.license}</span></div>
+                                <div style="padding-bottom: 12px;"><span class="dt">Rights:</span><span class="rights">${i.image?.rights}</span></div>
                             </details>
                         </div>
                     </div>
@@ -113,7 +109,7 @@
         </p>
     </section>
 </div>
-<script type="text/javascript">
+<r:script type="text/javascript">
     $(document).ready(function () {
         // wire link to species data
         $('#speciesData').click(function () {
@@ -132,6 +128,6 @@
         });
         tviewer.init("${grailsApplication.config.grails.serverURL}");
     });
-</script>
+</r:script>
 </body>
 </html>
