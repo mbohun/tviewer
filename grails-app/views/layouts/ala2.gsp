@@ -17,7 +17,7 @@
     <script language="JavaScript" type="text/javascript" src="http://ala.org.au/wp-content/themes/ala2011/scripts/superfish/superfish.js"></script>
     <script language="JavaScript" type="text/javascript" src="http://ala.org.au/wp-content/themes/ala2011/scripts/jquery.autocomplete.js"></script>
     <script language="JavaScript" type="text/javascript" src="http://ala.org.au/wp-content/themes/ala2011/scripts/uservoice.js"></script>
-    <script type="text/javascript">
+    <r:script type="text/javascript">
 
         // initialise plugins
 
@@ -79,7 +79,7 @@
                 selectFirst: false
             });
         });
-    </script>
+    </r:script>
     <r:require module="html5" />
     <r:layoutResources/>
 </head>
@@ -91,12 +91,13 @@
 
 <hf:footer/>
 
-<script type="text/javascript">
+<r:script type="text/javascript">
     // show warning if using IE6
     if ($.browser.msie && $.browser.version.slice(0,1) == '6') {
         $('#header').prepend($('<div style="text-align:center;color:red;">WARNING: This page is not compatible with IE6.' +
                 ' Many functions will still work but layout and image transparency will be disrupted.</div>'));
     }
-</script>
+</r:script>
+<r:layoutResources/>
 </body>
 </html>
