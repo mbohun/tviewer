@@ -99,9 +99,9 @@ var tviewer = {
     // asynchronous loading of image metadata
     injectImageMetadata: function (mdUrl, box) {
         $.getJSON(this.serverUrl + "/taxon/imageMetadataLookup", {url: mdUrl }, function (data) {
-            $(box.hash).find('dd.creator').html(data["http://purl.org/dc/elements/1.1/creator"]);
-            $(box.hash).find('dd.license').html(data["http://purl.org/dc/elements/1.1/license"]);
-            $(box.hash).find('dd.rights').html(data["http://purl.org/dc/elements/1.1/rights"]);
+            $(box.hash).find('.creator').html(data["http://purl.org/dc/elements/1.1/creator"]);
+            $(box.hash).find('.license').html(data["http://purl.org/dc/elements/1.1/license"]);
+            $(box.hash).find('.rights').html(data["http://purl.org/dc/elements/1.1/rights"]);
             $(box).colorbox.resize();
         });
     }
