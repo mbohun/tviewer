@@ -4,6 +4,8 @@ modules = {
         resource url:'js/tviewer.js', disposition: 'head'
         resource url:'js/jquery.ba-bbq.min.js', disposition: 'head'
         resource url:'js/jquery.colorbox-min.js', disposition: 'head'
+        resource url:'css/tview.css', disposition: 'head'
+        resource url:'css/colorbox.css', disposition: 'head'
     }
 
     html5 {
