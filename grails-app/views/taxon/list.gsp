@@ -4,8 +4,6 @@
 <head>
   <title>Taxon list</title>
   <meta name="layout" content="ala2"/>
-  <link rel="stylesheet" type="text/css" media="screen" href="${resource(dir:'css',file:'tview.css')}" />
-  <link rel="stylesheet" type="text/css" media="screen" href="${resource(dir:'css',file:'colorbox.css')}" />
   <r:require module="application"/>
 </head>
 <body class="family-list">
@@ -107,11 +105,9 @@
                                             <img src="${g.image?.largeImageUrl}" alt />
                                             <details open="open" data-mdurl="${g.image?.imageMetadataUrl}">
                                                 <summary id="${g.name}-summary">${g.name}</summary>
-                                                <dl>
-                                                    <dt>Image by</dt><dd class="creator">${g.image?.creator}</dd>
-                                                    <dt>License</dt><dd class="license">${g.image?.license}</dd>
-                                                    <dt>Rights</dt><dd class="rights">${g.image?.rights}</dd>
-                                                </dl>
+                                                <div><span class="dt">Image by:</span><span class="creator">${g.image?.creator}</span></div>
+                                                <div><span class="dt">License:</span><span class="license">${g.image?.license}</span></div>
+                                                <div style="padding-bottom: 12px;"><span class="dt">Rights:</span><span class="rights">${g.image?.rights}</span></div>
                                             </details>
                                           </div>
                                         </div>
@@ -163,6 +159,5 @@
             tviewer.init(serverUrl);
         });
     </r:script>
-    <r:layoutResources/>
 </body>
 </html>
