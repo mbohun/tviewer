@@ -64,7 +64,6 @@ class TaxonController {
 
         // inject remaining metadata only for the families to be displayed
         results = bieService.injectGenusMetadata(results)
-        //println results
 
         def model = [list: results, total: total, rank: 'family', parentTaxa: "", key: key,
                 queryDescription: data.queryDescription, start: start, pageSize: pageSize,
@@ -97,7 +96,7 @@ class TaxonController {
         //params.each { println it }
 
         // retrieve the required page from the results cache
-        def data = resultsService.getResultsPage(key, "", "", true, [:])
+        def data = resultsService.getResultsPage(key, "", "", false, [:])
         if (!data || data.error) {
             render "No data " + data.error
         }
@@ -139,7 +138,6 @@ class TaxonController {
             // inject remaining metadata only for species to be displayed
             results = bieService.injectSpeciesMetadata(results)
 
-            //println results
             def model = [list: results, total: total, taxa: params.taxa, start: start, key: key,
                     queryDescription: data.queryDescription, pageSize: pageSize, sortBy: sortBy,
                     sortOrder: params.sortOrder, query: data.list.query, rank: 'species',
