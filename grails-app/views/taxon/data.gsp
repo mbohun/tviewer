@@ -3,8 +3,6 @@
 <head>
     <title>Species data</title>
     <meta name="layout" content="ala2"/>
-    <link rel="stylesheet" type="text/css" media="screen" href="${resource(dir:'css',file:'tview.css')}" />
-    <link rel="stylesheet" type="text/css" media="screen" href="${resource(dir:'css',file:'colorbox.css')}" />
     <r:require module="application"/>
 </head>
 <body class="species-data">
@@ -76,10 +74,10 @@
         </p>
     </section>
 </div>
-<script type="text/javascript">
+<r:script type="text/javascript">
     $(document).ready(function () {
         tviewer.init("${grailsApplication.config.grails.serverURL}");
     });
-</script>
+</r:script>
 </body>
 </html>
