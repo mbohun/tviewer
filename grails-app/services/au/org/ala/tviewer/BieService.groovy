@@ -16,6 +16,9 @@ class BieService {
                 if (gen.guid) {
                     guids << gen.guid
                 }
+                if (gen.repSppGuid) {
+                    guids << gen.repSppGuid
+                }
             }
         }
 
@@ -25,15 +28,21 @@ class BieService {
         // inject the metadata
         list.each { fam ->
             fam.genera.each { gen ->
-                def data = md[gen.guid]
-                if (data) {
-                    gen.common = data.common
-                    if (data.image && data.image.largeImageUrl?.toString() != "null") {
-                        gen.image = data.image
-                    }
+                def genData = md[gen.guid]
+                if (genData) {
+                    gen.common = genData.common
                 }
                 else {
                     println "No metadata found for genus ${gen.name} (guid = ${gen.guid})"
+                }
+                def sppData = md[gen.repSppGuid]
+                if (sppData) {
+                    if (sppData.image && sppData.image.largeImageUrl?.toString() != "null") {
+                        gen.image = sppData.image
+                    }
+                }
+                else {
+                    println "No image found for genus ${gen.name} (guid = ${gen.guid})"
                 }
             }
         }
