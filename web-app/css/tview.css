@@ -60,6 +60,10 @@ table.taxonList td.mainImage {
     width: 400px;
 }
 
+#tdCaabCode {
+    width: 70px;
+}
+
 img.list {
     max-width: 285px;
     /*max-height: 150px;*/
@@ -95,6 +99,10 @@ table.taxonData > tbody > tr, table.taxonList > thead > tr {
 /* image */
 a.imageContainer {
     text-align: center;
+}
+
+a.no-image {
+    cursor: default;
 }
 
 table.taxonList span.rights {
@@ -194,6 +202,10 @@ img.thumb {
     display: block;
 }
 
+img.no-image-small {
+    display: block;
+}
+
 table.genera {
     margin: 0;
     padding: 0;
@@ -251,4 +263,11 @@ li.currentPage {
 
 #controls label {
     margin-left: 5px;
+}
+
+#viewLinks {
+    padding: 0;
+}
+#checkboxButtons {
+    margin-left: 190px;
 }
