@@ -33,7 +33,22 @@ var tviewer = {
         this.serverUrl = serverUrl;
 
         var that = this,
-            params = $.deparam.querystring(true);
+            params = $.deparam.querystring(true),
+            colorboxOptions = {
+                opacity: 0.5,
+                    inline: true,
+                    onLoad:function () {
+                    var $popup = $(this.hash),
+                        mdUrl = $popup.find('details').data('mdurl');
+
+                    if (mdUrl) {
+                        // add 'loading..' status
+                        $popup.find('dd').html('loading..');
+                        // load and inject metadata
+                        that.injectImageMetadata(mdUrl, this);
+                    }
+                }
+            };
 
         // set search controls based on url params - !this must be done before binding events
         if (params.pageSize !== undefined) {
@@ -62,30 +77,28 @@ var tviewer = {
         });
 
         // wire lightbox for images
-        $('.imageContainer,.distributionImageContainer').colorbox({
-            opacity: 0.5,
-            inline: true,
-            onLoad:function () {
-                var $popup = $(this.hash),
-                    mdUrl = $popup.find('details').data('mdurl');
+        $('.lightbox').colorbox(colorboxOptions);
 
-                if (mdUrl) {
-                    // add 'loading..' status
-                    $popup.find('dd').html('loading..');
-                    // load and inject metadata
-                    that.injectImageMetadata(mdUrl, this);
-                }
-            }
-        });
         // change main image on mouseover of genera images
         $('img.thumb').on('mouseenter', function () {
             var $mainImageTd = $(this).closest('table.genera').parent().prev(),
-                    $genusTd = $(this).parent().parent(),
-                    $mainImage = $mainImageTd.find('a.imageContainer img'),
-                    $popupContent = $mainImageTd.find('div.popupContent'),
-                    $popImage = $popupContent.find('img'),
-                    newImageSrc = $(this).attr('src'),
-                    mdUrl = $genusTd.find('details').data('mdurl');
+                $genusTd = $(this).parent().parent(),
+                $mainImageLink = $mainImageTd.find('a.imageContainer'),
+                $mainImage = $mainImageLink.find('img'),
+                $popupContent = $mainImageTd.find('div.popupContent'),
+                $popImage = $popupContent.find('img'),
+                newImageSrc = $(this).attr('src'),
+                mdUrl = $genusTd.find('details').data('mdurl');
+
+            // handle case where the initial image is 'no image available'
+            if ($mainImageLink.hasClass('no-image')) {
+                // remove 'no-image'
+                $mainImageLink.removeClass('no-image');
+                // make sure the image is included in the colorbox group
+                $mainImageLink.addClass('lightbox');
+                $mainImageLink.attr('rel','list');
+                $mainImageLink.colorbox(colorboxOptions);
+            }
 
             // change the image src
             $mainImage.attr('src',newImageSrc);
