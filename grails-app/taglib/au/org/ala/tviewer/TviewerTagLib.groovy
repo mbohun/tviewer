@@ -27,7 +27,7 @@ class TviewerTagLib {
         // the num of the page being displayed
         int currentPage = start/pageSize
         // the num of pages
-        int totalPages = total/pageSize
+        int totalPages = Math.ceil total/pageSize
         // the index of the last page (zero-based)
         int lastPage = totalPages - 1
         // whether we need to abbreviate the list of page links
@@ -37,10 +37,25 @@ class TviewerTagLib {
         // there are no more pages on the right end to fill the list) so that we maintain the same number
         // of links in the list - simple, yes?
         int startOffset = Math.max(currentPage - (lastPage - MAX_PAGE_LINKS), MAX_PAGE_LINKS/2 as int)
-        // the num of the page for the first link - 0 unless we are abbreviating the list
+        // the num of the page for the first link - 0 unless we are abbreviating the list on the left
         int startingPageLink = abbreviateLinks ? Math.max(currentPage - startOffset, 0) : 0
-        // the num of the page for the last link - total/pageSize unless we are abbreviating the list
+        // the num of the page for the last link - total/pageSize unless we are abbreviating the list on the right
         int endingPageLink = abbreviateLinks ? Math.min(startingPageLink + MAX_PAGE_LINKS, lastPage) : lastPage
+        /* Because the algorithm requires the first and last page links to always be shown, we need another
+         * set of pointers for the start and end of the inner set of page links */
+        // if the first page is 0, skip it as already shown
+        int innerStartingPageLink = startingPageLink == 0 ? 1 : startingPageLink
+        // if the last page is the absolute last page, skip it as it will be shown
+        int innerEndingPageLink = endingPageLink == lastPage ? endingPageLink - 1 : endingPageLink
+        // this caters for the edge case where there are only 2 pages so no inner links need to be shown
+        boolean needInnerLinks = innerEndingPageLink >= innerStartingPageLink
+
+        /*println "Pagination debugging"
+        println "total=${total} pageSize=${pageSize} start=${start} currentPage=${currentPage}"
+        println "totalPages=${totalPages} lastPage=${lastPage} abbreviateLinks=${abbreviateLinks}"
+        println "startOffset=${startOffset} startingPageLink=${startingPageLink} endingPageLink=${endingPageLink}"
+        println "innerStartingPageLink=${innerStartingPageLink} innerEndingPageLink=${innerEndingPageLink}"
+        println "needInnerLinks=${needInnerLinks}"*/
 
         // params to include in page links
         def otherParams = ""
@@ -82,10 +97,10 @@ class TviewerTagLib {
 
             // show the page links btw start and end - bearing in mind the absolute first and
             // last pages are shown separately
-            def s = startingPageLink == 0 ? 1 : startingPageLink // skip page 0 as already shown
-            def e = endingPageLink == lastPage ? lastPage -1 : endingPageLink // skip last page as will always be shown
-            (s..e).each {
-                writePageLink it
+            if (needInnerLinks) {
+                (innerStartingPageLink..innerEndingPageLink).each {
+                    writePageLink it
+                }
             }
 
             // show ellipsis if we are abbreviating the list at the end
