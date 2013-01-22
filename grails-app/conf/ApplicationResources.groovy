@@ -9,7 +9,7 @@ modules = {
     }
 
     html5 {
-        resource url:'js/html5.js',
+        resource url:'js/html5.js', disposition: 'head',
                 wrapper: { s -> "<!--[if lt IE 9]>$s<![endif]-->" }
     }
 
