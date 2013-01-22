@@ -80,15 +80,12 @@
                         <div style="display: none">
                             <div class="popupContent" id="${i.name}-popup">
                                 <img src="${largeImageUrl}" alt />
-                                <details open="open" data-mdurl="${imageMetadataUrl}">
-                                    <summary id="${i.name}-summary">${i.name}
-                                    </summary>
-                                    <dl>
-                                        <dt>Image by</dt><dd class="creator">${creator}</dd>
-                                        <dt>License</dt><dd class="license">${license}</dd>
-                                        <dt>Rights</dt><dd class="rights">${rights}</dd>
-                                    </dl>
-                                </details>
+                                <div class="details" data-mdurl="${imageMetadataUrl}">
+                                    <div class='summary' id="${i.name}-summary">${i.name}</div>
+                                    <div><span class="dt">Image by:</span><span class="creator">${creator}</span></div>
+                                    <div><span class="dt">License:</span><span class="license">${license}</span></div>
+                                    <div style="padding-bottom: 12px;"><span class="dt">Rights:</span><span class="rights">${rights}</span></div>
+                                </div>
                             </div>
                         </div>
                     </td>
@@ -114,12 +111,12 @@
                                         <div style="display: none">
                                           <div class="popupContent" id="${g.name}-popup">
                                             <img src="${g.image?.largeImageUrl}" alt />
-                                            <details open="open" data-mdurl="${g.image?.imageMetadataUrl}">
-                                                <summary id="${g.name}-summary">${g.name}</summary>
+                                            <div class="details" data-mdurl="${g.image?.imageMetadataUrl}">
+                                                <div class="summary" id="${g.name}-summary">${g.name}</div>
                                                 <div><span class="dt">Image by:</span><span class="creator">${g.image?.creator}</span></div>
                                                 <div><span class="dt">License:</span><span class="license">${g.image?.license}</span></div>
                                                 <div style="padding-bottom: 12px;"><span class="dt">Rights:</span><span class="rights">${g.image?.rights}</span></div>
-                                            </details>
+                                            </div>
                                           </div>
                                         </div>
                                     </g:if>

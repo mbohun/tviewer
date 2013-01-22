@@ -70,12 +70,12 @@
                         <div style="display: none">
                             <div class="popupContent" id="${i.name.replace(' ','_')}-popup">
                                 <img src="${i.image.largeImageUrl}" alt />
-                                <details open="open" data-mdurl="${i.image.imageMetadataUrl}">
-                                    <summary id="${i.name.replace(' ','_')}-summary"><strong><em>${i.name}</em></strong></summary>
+                                <div class="details" data-mdurl="${i.image.imageMetadataUrl}">
+                                    <div class="summary" id="${i.name.replace(' ','_')}-summary"><strong><em>${i.name}</em></strong></div>
                                     <div><span class="dt">Image by:</span><span class="creator">${i.image?.creator}</span></div>
                                     <div><span class="dt">License:</span><span class="license">${i.image?.license}</span></div>
                                     <div style="padding-bottom: 12px;"><span class="dt">Rights:</span><span class="rights">${i.image?.rights}</span></div>
-                                </details>
+                                </div>
                             </div>
                         </div>
                     </g:if>
@@ -94,9 +94,9 @@
                     <div style="display: none">
                         <div class="popupContent" id="${i.name.replace(' ','_')}-dist">
                             <img src="${grailsApplication.config.distribution.image.cache}/dist${i.gidx}.png" alt width="400" height="400"/>
-                            <details open="open" style="padding-bottom: 10px;">
-                                <summary id="${i.name.replace(' ','_')}-distsummary"><strong><em>${i.name}</em></strong></summary>
-                            </details>
+                            <div class="details" style="padding-bottom: 10px;">
+                                <div class="summary" id="${i.name.replace(' ','_')}-distsummary"><strong><em>${i.name}</em></strong></div>
+                            </div>
                         </div>
                     </div>
                 </g:if></td>

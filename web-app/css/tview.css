@@ -118,35 +118,15 @@ div.gContent {
     display: none;
 }
 
-summary {
+div.summary {
     font-weight: bold;
     font-size: larger;
-}
-
-details summary::-webkit-details-marker {
-    display: none;
+    text-align: center;
 }
 
 span.dt {
     font-weight: bold;
     padding-right: 4px;
-}
-
-dt, dd {
-    display: inline;
-}
-
-dd {
-    padding-left: 4px;
-}
-
-dd::after {
-    content: "\a";
-    white-space: pre;
-}
-
-dt::after {
-    content: ":";
 }
 
 #cboxLoadedContent {

@@ -39,7 +39,7 @@ var tviewer = {
                     inline: true,
                     onLoad:function () {
                     var $popup = $(this.hash),
-                        mdUrl = $popup.find('details').data('mdurl');
+                        mdUrl = $popup.find('div.details').data('mdurl');
 
                     if (mdUrl) {
                         // add 'loading..' status
@@ -88,7 +88,7 @@ var tviewer = {
                 $popupContent = $mainImageTd.find('div.popupContent'),
                 $popImage = $popupContent.find('img'),
                 newImageSrc = $(this).attr('src'),
-                mdUrl = $genusTd.find('details').data('mdurl');
+                mdUrl = $genusTd.find('div.details').data('mdurl');
 
             // handle case where the initial image is 'no image available'
             if ($mainImageLink.hasClass('no-image')) {
@@ -105,7 +105,7 @@ var tviewer = {
             // change the popup img
             $popImage.attr('src',newImageSrc);
             // change the metadata url
-            $popupContent.find('details').data('mdurl', mdUrl);
+            $popupContent.find('div.details').data('mdurl', mdUrl);
             that.injectImageMetadata(mdUrl, $(this).parent());
         });
     },
