@@ -143,6 +143,10 @@ class TaxonController {
                     sortOrder: params.sortOrder, query: data.list.query, rank: 'species',
                     searchPage: ConfigurationHolder.config.distribution.search.baseUrl]
 
+            if (genus) {
+                model.put 'genus',genus
+            }
+
             if (params.debugModel == 'true') {
                 render model as JSON
             }
