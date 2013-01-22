@@ -20,6 +20,7 @@
     </div>
 </header>
 <div class="inner">
+    <span style="color: grey">Click images to view full size.</span>
     <div id="controls">
         <label for="sortBy">Sort by:</label>
         <g:select from="[[text:'Scientific name',id:'name'],[text:'Common name',id:'common'],[text:'Family/genus/spp',id:'taxa'],[text:'CAAB code',id:'caabCode']]"
@@ -34,13 +35,13 @@
             <col id="tlCheckbox"> <!-- checkbox -->
             <col id="tlName"> <!-- taxon name -->
             <col id="tlImage"> <!-- image -->
-            <col id="tlGenera"> <!-- genera -->
+            <col id="tlGenera"> <!-- distribution map -->
         </colgroup>
         <thead>
         <tr><th></th><th>Scientific name<br/><span style="font-weight: normal;">Common name<br/>Family<br/>CAAB code
             <a href="http://www.marine.csiro.au/caab/" class="external">more info</a></span></th>
-            <th style="text-align: center;vertical-align: middle;">Representative image</th>
-            <th>Distribution</th></tr>
+            <th style="text-align:center;vertical-align:middle;">Representative image</th>
+            <th style="padding-left:60px;">Distribution</th></tr>
         </thead>
         <tbody>
         <g:each in="${list}" var="i">
@@ -61,25 +62,32 @@
                             class="external" title="Lookup CAAB code">${i.caabCode}</a></div>
                 </g:if></td>
                 <!-- image -->
-                <td class="mainImage"><g:if test="${i.image?.largeImageUrl}">
-                    <a rel="list" class="imageContainer" href="#${i.name.replace(' ','_')}-popup">
-                        <img class="list" src="${i.image.largeImageUrl}" alt title="Click to view full size"/>
-                    </a>
-                    <div style="display: none">
-                        <div class="popupContent" id="${i.name.replace(' ','_')}-popup">
-                            <img src="${i.image.largeImageUrl}" alt />
-                            <details open="open" data-mdurl="${i.image.imageMetadataUrl}">
-                                <summary id="${i.name.replace(' ','_')}-summary"><strong><em>${i.name}</em></strong></summary>
-                                <div><span class="dt">Image by:</span><span class="creator">${i.image?.creator}</span></div>
-                                <div><span class="dt">License:</span><span class="license">${i.image?.license}</span></div>
-                                <div style="padding-bottom: 12px;"><span class="dt">Rights:</span><span class="rights">${i.image?.rights}</span></div>
-                            </details>
+                <td class="mainImage">
+                    <g:if test="${i.image?.largeImageUrl}">
+                        <a rel="list" class="imageContainer lightbox" href="#${i.name.replace(' ','_')}-popup">
+                            <img class="list" src="${i.image.largeImageUrl}" alt title="Click to view full size"/>
+                        </a>
+                        <div style="display: none">
+                            <div class="popupContent" id="${i.name.replace(' ','_')}-popup">
+                                <img src="${i.image.largeImageUrl}" alt />
+                                <details open="open" data-mdurl="${i.image.imageMetadataUrl}">
+                                    <summary id="${i.name.replace(' ','_')}-summary"><strong><em>${i.name}</em></strong></summary>
+                                    <div><span class="dt">Image by:</span><span class="creator">${i.image?.creator}</span></div>
+                                    <div><span class="dt">License:</span><span class="license">${i.image?.license}</span></div>
+                                    <div style="padding-bottom: 12px;"><span class="dt">Rights:</span><span class="rights">${i.image?.rights}</span></div>
+                                </details>
+                            </div>
                         </div>
-                    </div>
-                </g:if></td>
+                    </g:if>
+                    <g:else>
+                        <a class="imageContainer no-image" href="#${i.name}-popup">
+                            <r:img class="list" uri="/images/no-image.png"/>
+                        </a>
+                    </g:else>
+                </td>
                 <!-- distribution -->
                 <td><g:if test="${i.gidx}">
-                    <a rel="dist" class="distributionImageContainer" href="#${i.name.replace(' ','_')}-dist">
+                    <a rel="dist" class="distributionImageContainer lightbox" href="#${i.name.replace(' ','_')}-dist">
                         <img class="dist" src="${grailsApplication.config.distribution.image.cache}/dist${i.gidx}.png"
                              alt title="Click for larger view"/>
                     </a>
@@ -98,15 +106,17 @@
     </table>
     <section id="pagination">
         <tv:paginate start="${start}" pageSize="${pageSize}" total="${total}"
-                     params="${[taxa:taxa,key:key,sortBy:sortBy,sortOrder:sortOrder]}"/>
-        <p>
+                     params="${[taxa:taxa,key:key,sortBy:sortBy,sortOrder:sortOrder,genus:genus]}"/>
+        <p id="viewLinks">
             Total <tv:pluraliseRank rank="species"/>: ${total}
             <span class="link" id="speciesData">Show data table for checked <tv:pluraliseRank rank="${rank}"/></span>
             <g:link style="padding-left:20px;" action="view" params="[key: key]">Show all results by family</g:link>
             <g:link style="padding-left:20px;" action="data" params="[key: key]">Show data table for all species</g:link><br/>
+        </p>
+        <div id="checkboxButtons">
             <button id="selectAll" type="button">Select all</button>
             <button id="clearAll" type="button">Clear all</button>
-        </p>
+        </div>
     </section>
 </div>
 <r:script type="text/javascript">
