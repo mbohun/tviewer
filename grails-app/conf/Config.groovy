@@ -42,6 +42,11 @@ if (!headerAndFooter.baseURL) {
     headerAndFooter.baseURL = "http://www2.ala.org.au/commonui"
 }
 /******************************************************************************\
+ *  APP CONFIG
+ \******************************************************************************/
+image.source.dataResourceUid = 'dr660'
+
+/******************************************************************************\
  *  SECURITY
  \******************************************************************************/
 if (!security.cas.urlPattern) {
@@ -111,7 +116,8 @@ environments {
         grails.host = "localhost"
         //grails.host = "woodfired.ala.org.au"
         grails.serverURL = "http://${grails.host}:8082/${appName}"
-        distribution.image.cache = "http://${grails.host}/data/expert/images"
+        //distribution.image.cache = "http://${grails.host}/data/expert/images"
+        distribution.image.cache = "http://fish.ala.org.au/data/images"
         results.cache.baseUrl = "http://${grails.host}:8081/expert/results"
         distribution.search.baseUrl = "http://${grails.host}:8081/expert/search"
     }

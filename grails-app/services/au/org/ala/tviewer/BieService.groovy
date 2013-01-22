@@ -5,7 +5,7 @@ import grails.converters.JSON
 
 class BieService {
 
-    def webService
+    def webService, grailsApplication
 
     def injectGenusMetadata(list) {
 
@@ -37,7 +37,8 @@ class BieService {
                 }
                 def sppData = md[gen.repSppGuid]
                 if (sppData) {
-                    if (sppData.image && sppData.image.largeImageUrl?.toString() != "null") {
+                    if (sppData.image && sppData.image.largeImageUrl?.toString() != "null" &&
+                            sppData.image.imageSource == grailsApplication.config.image.source.dataResourceUid) {
                         gen.image = sppData.image
                     }
                 }
@@ -68,7 +69,8 @@ class BieService {
             def data = md[sp.guid]
             if (data) {
                 //sp.common = data.common  // don't override common name with name from bie as CMAR is more authoritative
-                if (data.image && data.image.largeImageUrl?.toString() != "null") {
+                if (data.image && data.image.largeImageUrl?.toString() != "null" &&
+                        data.image.imageSource == grailsApplication.config.image.source.dataResourceUid) {
                     sp.image = data.image
                 }
             }
@@ -90,7 +92,8 @@ class BieService {
                    image: [largeImageUrl: item.largeImageUrl,
                            smallImageUrl: item.smallImageUrl,
                            thumbnailUrl: item.thumbnailUrl,
-                           imageMetadataUrl: item.imageMetadataUrl]]
+                           imageMetadataUrl: item.imageMetadataUrl,
+                           imageSource: item.imageSource]]
         }
         return results
     }
