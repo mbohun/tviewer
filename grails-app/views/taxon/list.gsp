@@ -21,6 +21,7 @@
     </div>
 </header>
     <div class="inner">
+        <span style="color: grey">Click images to view full size.</span>
         <div id="controls">
             <label for="sortBy">Sort by:</label>
             <g:select from="[[text:'Scientific name',id:'name'],[text:'Common name',id:'common'],[text:'CAAB code',id:'caabCode']]"
@@ -66,9 +67,16 @@
                         <g:set var="creator" value="${i.image==JSONObject.NULL ? '' : i.image?.creator}"/>
                         <g:set var="license" value="${i.image==JSONObject.NULL ? '' : i.image?.license}"/>
                         <g:set var="rights" value="${i.image==JSONObject.NULL ? '' : i.image?.rights}"/>
-                        <a rel="list" class="imageContainer" href="#${i.name}-popup">
-                          <img class="list" src="${largeImageUrl}" alt title="Click to view full size"/>
-                        </a>
+                        <g:if test="${largeImageUrl}">
+                            <a rel="list" class="imageContainer lightbox" href="#${i.name}-popup">
+                                <img class="list" src="${largeImageUrl}" alt title="Click to view full size"/>
+                            </a>
+                        </g:if>
+                        <g:else>
+                            <a class="imageContainer no-image" href="#${i.name}-popup">
+                                <r:img class="list" uri="/images/no-image.png"/>
+                            </a>
+                        </g:else>
                         <div style="display: none">
                             <div class="popupContent" id="${i.name}-popup">
                                 <img src="${largeImageUrl}" alt />
@@ -93,10 +101,13 @@
                                 </g:if>
                                 <td>
                                     <g:if test="${g.image}">
-                                        <a rel="${i.name}" class="imageContainer" href="#${g.name}-popup">
+                                        <a rel="${i.name}" class="imageContainer lightbox" href="#${g.name}-popup">
                                             <img class="thumb" src="${g.image?.largeImageUrl}"/>
                                         </a>
                                     </g:if>
+                                    <g:else>
+                                        <r:img class="no-image-small" uri="/images/no-image-small.png"/>
+                                    </g:else>
                                     <g:link action="species" params="[key: key, genus: g.name]"
                                     title="${g.speciesCount} species">${g.name}</g:link>
                                     <g:if test="${g.image}">
@@ -126,14 +137,16 @@
         <section id="pagination">
             <tv:paginate start="${start}" pageSize="${pageSize}" total="${total}"
                          params="${[key:key,sortBy:sortBy,sortOrder:sortOrder]}"/>
-            <p>
+            <p id="viewLinks">
                 Total <tv:pluraliseRank rank="${rank}"/>: ${total}
                 <span class="link" id="speciesList">Show species list for checked <tv:pluraliseRank rank="${rank}"/></span>
                 <g:link style="padding-left:20px;" action="species" params="[key: key]">Show all results by species</g:link>
                 <g:link style="padding-left:20px;" action="data" params="[key: key]">Show data table for all species</g:link><br/>
+            </p>
+            <div id="checkboxButtons">
                 <button id="selectAll" type="button">Select all</button>
                 <button id="clearAll" type="button">Clear all</button>
-            </p>
+            </div>
         </section>
     </div>
     <r:script>
