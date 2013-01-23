@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Species data</title>
+    <title>Species data - FishMap</title>
     <meta name="layout" content="ala2"/>
     <r:require module="application"/>
 </head>
