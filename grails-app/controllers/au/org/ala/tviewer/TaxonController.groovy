@@ -42,39 +42,47 @@ class TaxonController {
 
         // retrieve the required page from the results cache
         def data = resultsService.getResultsPage(key, "", "", true, [:])
-        
-        def results = data.taxonHierarchy
 
-        // sort by
-        def sortBy = params.sortBy ?: 'name'
-        results.sort {it[sortBy]}
-
-        // sort order
-        if (params.sortOrder == 'reverse') {
-            results = results.reverse()
-        }
-
-        // pagination
-        def total = results.size()
-        def start = params.start ? params.start as int : 0
-        def pageSize = params.pageSize ? params.pageSize as int : 10
-        if (results) {
-            results = results[start..(Math.min(start + pageSize, total) - 1)]
-        }
-
-        // inject remaining metadata only for the families to be displayed
-        results = bieService.injectGenusMetadata(results)
-
-        def model = [list: results, total: total, rank: 'family', parentTaxa: "", key: key,
-                queryDescription: data.queryDescription, start: start, pageSize: pageSize,
-                sortBy: sortBy, sortOrder: params.sortOrder, query: data.query,
-                searchPage: ConfigurationHolder.config.distribution.search.baseUrl]
-
-        if (params.debugModel == 'true') {
-            render model as JSON
+        // check for errors
+        if (data.error) {
+            render view: 'error', model: [message: data.error,
+                    searchPage: ConfigurationHolder.config.distribution.search.baseUrl]
         }
         else {
-            render (view: 'list', model: model)
+
+            def results = data.taxonHierarchy
+
+            // sort by
+            def sortBy = params.sortBy ?: 'name'
+            results.sort {it[sortBy]}
+
+            // sort order
+            if (params.sortOrder == 'reverse') {
+                results = results.reverse()
+            }
+
+            // pagination
+            def total = results.size()
+            def start = params.start ? params.start as int : 0
+            def pageSize = params.pageSize ? params.pageSize as int : 10
+            if (results) {
+                results = results[start..(Math.min(start + pageSize, total) - 1)]
+            }
+
+            // inject remaining metadata only for the families to be displayed
+            results = bieService.injectGenusMetadata(results)
+
+            def model = [list: results, total: total, rank: 'family', parentTaxa: "", key: key,
+                    queryDescription: data.queryDescription, start: start, pageSize: pageSize,
+                    sortBy: sortBy, sortOrder: params.sortOrder, query: data.query,
+                    searchPage: ConfigurationHolder.config.distribution.search.baseUrl]
+
+            if (params.debugModel == 'true') {
+                render model as JSON
+            }
+            else {
+                render (view: 'list', model: model)
+            }
         }
     }
 
