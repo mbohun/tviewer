@@ -25,8 +25,14 @@ body {
     color: transparent;  /* only for text readers - visual title is in the banner image */
 }
 
-#page-header .inner {
+div.no-top {
     padding-top: 0;
+}
+
+#page-header h2 {
+    font-size: 1.6em;
+    padding: 10px 0 0 0;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #breadcrumb {
@@ -90,6 +96,10 @@ table.taxonList > tbody > tr, table.taxonList > thead > tr {
 }
 table.taxonData > tbody > tr, table.taxonList > thead > tr {
     border-bottom: 1px solid #F0F0E8;/*#FaF9F2;*/
+}
+
+table.taxonList > thead > tr, table.taxonData > thead > tr {
+    border-top: 3px solid #F0F0E8;
 }
 
 /*table.taxonList tr:nth-child(even) {

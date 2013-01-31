@@ -7,20 +7,19 @@
   <r:require module="application"/>
 </head>
 <body class="family-list">
-<header id="page-header">
-    <div class="inner">
-        <hgroup>
-            <h1>Visual explorer - ${rank} list</h1>
-            <h2>Query: ${queryDescription ?: 'Australia'}</h2>
-            <p>Click on images to view at full size.</p>
-        </hgroup>
-        <nav id="breadcrumb"><ol>
-            <li><a href="${searchPage}">Search</a></li>
-            <li class="last"><i>Results by family</i></li></ol>
-        </nav>
-    </div>
-</header>
-    <div class="inner">
+    <header id="page-header">
+        <div class="inner no-top">
+            <hgroup>
+                <h1 title="Visual explorer - ${rank} list"></h1>
+            </hgroup>
+            <nav id="breadcrumb"><ol>
+                <li><a href="${searchPage}">Search</a></li>
+                <li class="last"><i>Results by family</i></li></ol>
+            </nav>
+            <h2>Results for ${queryDescription ?: 'Australia'}</h2>
+        </div>
+    </header>
+    <div class="inner no-top">
         <span style="color: grey">Click images to view full size.</span>
         <div id="controls">
             <label for="sortBy">Sort by:</label>

@@ -7,10 +7,9 @@
 </head>
 <body class="species-data">
 <header id="page-header">
-    <div class="inner">
+    <div class="inner no-top">
         <hgroup>
-            <h1>Data explorer - species data</h1>
-            <h2>Query: ${queryDescription ?: 'Australia'}</h2>
+            <h1 title="Data explorer - species data"></h1>
         </hgroup>
         <nav id="breadcrumb"><ol>
             <li><a href="${searchPage}">Search</a></li>
@@ -19,6 +18,7 @@
     </div>
 </header>
 <div class="inner">
+    <h2 style="float:left;">Results for ${queryDescription ?: 'Australia'}</h2>
     <div id="controls">
         <label for="sortBy">Sort by:</label>
         <g:select from="[[text:'Family/genus/spp',id:'taxa'],[text:'Scientific name',id:'name'],[text:'Common name',id:'common'],[text:'CAAB code',id:'caabCode']]"

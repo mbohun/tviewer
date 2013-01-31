@@ -7,19 +7,18 @@
 </head>
 <body class="species-list">
 <header id="page-header">
-    <div class="inner">
+    <div class="inner no-top">
         <hgroup>
-            <h1>Visual explorer - species list</h1>
-            <h2>Query: ${queryDescription ?: 'Australia'}</h2>
-            <p>Click on images to view at full size.</p>
+            <h1 title="Visual explorer - species list"></h1>
         </hgroup>
         <nav id="breadcrumb"><ol>
             <li><a href="${searchPage}">Search</a></li>
             <li class="last"><i>Results by species</i></li></ol>
         </nav>
+        <h2>Results for ${queryDescription ?: 'Australia'}</h2>
     </div>
 </header>
-<div class="inner">
+<div class="inner no-top">
     <span style="color: grey">Click images to view full size.</span>
     <div id="controls">
         <label for="sortBy">Sort by:</label>
