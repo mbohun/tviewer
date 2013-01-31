@@ -69,8 +69,10 @@
         </tbody>
     </table>
     <section id="pagination">
-        <p>
+        <p id="viewLinks">
             Total <tv:pluraliseRank rank="species"/>: ${total}
+            <g:link style="padding-left:20px;" action="view" params="[key: key]">Show all results by family</g:link>
+            <g:link style="padding-left:20px;" action="species" params="[key: key]">Show all results by species</g:link>
         </p>
     </section>
 </div>
