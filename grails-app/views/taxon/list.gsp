@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Family view - FishMap</title>
+  <title>Family view | FishMap | Atlas of Living Australia</title>
   <meta name="layout" content="ala2"/>
   <r:require module="application"/>
 </head>
