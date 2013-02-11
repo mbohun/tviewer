@@ -40,7 +40,10 @@
         <tr><th></th><th>Scientific name<br/><span style="font-weight: normal;">Common name<br/>Family<br/>CAAB code
             <a href="http://www.marine.csiro.au/caab/" class="external">more info</a></span></th>
             <th style="text-align:center;vertical-align:middle;">Representative image</th>
-            <th style="padding-left:60px;">Distribution</th></tr>
+            <th style="padding-left:60px;">Distribution<br>
+                <a target="_maps" href="${grailsApplication.config.distribution.search.baseUrl}/distributionModelling">About maps</a>
+            </th>
+        </tr>
         </thead>
         <tbody>
         <g:each in="${list}" var="i">
@@ -90,10 +93,11 @@
                         <img class="dist" src="${grailsApplication.config.distribution.image.cache}/dist${i.gidx}.png"
                              alt title="Click for larger view"/>
                     </a>
-                    <div style="display: none">
-                        <div class="popupContent" id="${i.name.replace(' ','_')}-dist">
-                            <img src="${grailsApplication.config.distribution.image.cache}/dist${i.gidx}.png" alt width="400" height="400"/>
-                            <div class="details" style="padding-bottom: 10px;">
+                    <div style="display:none">
+                        <div class="popupContent distribution-popup" id="${i.name.replace(' ','_')}-dist">
+                            <img src="${grailsApplication.config.distribution.image.cache}/dist${i.gidx}.png" alt width="400" height="400"/><br>
+                            <a target="_maps" href="${grailsApplication.config.distribution.search.baseUrl}/distributionModelling">About the map</a><br>
+                            <div class="details">
                                 <div class="summary" id="${i.name.replace(' ','_')}-distsummary"><strong><em>${i.name}</em></strong></div>
                             </div>
                         </div>
