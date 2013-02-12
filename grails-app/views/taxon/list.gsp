@@ -89,7 +89,7 @@
                         </div>
                     </td>
                     <!-- genera -->
-                    <td>
+                    <td class="genera">
                         <table class="genera">
                             <g:each in="${i.genera}" var="g" status="count">
                                 <g:if test="${count % 4 == 0}">
@@ -105,7 +105,9 @@
                                         <r:img class="no-image-small" uri="/images/no-image-small.png"/>
                                     </g:else>
                                     <g:link action="species" params="[key: key, genus: g.name]"
-                                    title="${g.speciesCount} species">${g.name}</g:link>
+                                        title="${g.speciesCount} species">
+                                        <span class="${(g.name.size() > 13 ? 'tight' : '') + (g.name.size() > 17 ? ' veryTight' : '')}" >${g.name}</span>
+                                    </g:link>
                                     <g:if test="${g.image}">
                                         <div style="display: none">
                                           <div class="popupContent" id="${g.name}-popup">

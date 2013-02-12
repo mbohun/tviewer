@@ -57,6 +57,11 @@ table.taxonList, table.taxonData {
     background-color: white;
 }
 
+table.taxonList {
+    table-layout: fixed;
+    width: 972px;
+}
+
 table.taxonList td {
     text-align: left;
 }
@@ -194,15 +199,21 @@ img.thumb {
 
 img.no-image-small {
     display: block;
+    padding-bottom: 10px;
+}
+
+td.genera {
+    width: 374px;
 }
 
 table.genera {
+    table-layout: fixed;
+    width: 341px;
     margin: 0;
     padding: 0;
 }
 
 table.genera td {
-    /*text-align: center;*/
     padding: 0 10px 0 0;
 }
 
@@ -210,6 +221,17 @@ table.genera td {
     text-align: left;
 }
 
+table.genera td {
+    vertical-align: bottom;
+}
+
+span.tight {
+    font-family: 'Arial Narrow', Arial, Helvetica, sans-serif;
+}
+
+span.veryTight {
+    font-size: 0.8em;
+}
 /* distribution map */
 
 div.distribution-popup {
