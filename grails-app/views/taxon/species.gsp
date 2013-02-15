@@ -27,7 +27,7 @@
         <label for="sortOrder">Sort order:</label>
         <g:select from="['normal','reverse']" name="sortOrder"/>
         <label for="perPage">Results per page:</label>
-        <g:select from="[5,10,20,50,100]" name="perPage" value="10"/>
+        <g:select from="[5,10,20,50,100,500]" name="perPage" value="10"/>
     </div>
     <table class="taxonList">
         <colgroup>
