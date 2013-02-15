@@ -1,6 +1,5 @@
 package au.org.ala.tviewer
 
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import grails.converters.JSON
 
 class BieService {
@@ -83,7 +82,7 @@ class BieService {
     }
 
     def betterBulkLookup(list) {
-        def url = ConfigurationHolder.config.bie.baseURL + "/species/guids/bulklookup.json"
+        def url = grailsApplication.config.bie.baseURL + "/species/guids/bulklookup.json"
         def data = webService.doPost(url, "", (list as JSON).toString())
         Map results = [:]
         data.resp.searchDTOList.each {item ->
@@ -108,7 +107,7 @@ class BieService {
         if (bieNameGuidCache[name]) {
             return bieNameGuidCache[name]
         }
-        def resp = getJson(ConfigurationHolder.config.bie.baseURL + "/species/" + key + ".json")
+        def resp = getJson(grailsApplication.config.bie.baseURL + "/species/" + key + ".json")
         if (!resp || resp.error) {
             return [name: name, guid: guid]
         }
@@ -120,7 +119,7 @@ class BieService {
     }
 
     def getPreferredImage(name) {
-        def resp = getJson(ConfigurationHolder.config.bie.baseUrl + "/species/${name}.json")
+        def resp = getJson(grailsApplication.config.bie.baseUrl + "/species/${name}.json")
         return extractPreferredImage(resp.images)
     }
 
