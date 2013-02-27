@@ -173,4 +173,22 @@ class TviewerTagLib {
             return body()
         }
     }
+
+    // splits a family caab number like '37 441' into ctg and fcde components
+    def splitFamilyCaab = { attrs, body ->
+        def caab = attrs.caab
+        def ctg = ''
+        def fcde = ''
+        def bits = caab.tokenize(' ')
+        if (bits.size() < 2) {
+            // no space was present so take the first 2 chars as ctg
+            if (caab.size() > 1) { ctg = caab[0..1] }
+            if (caab.size() > 2) { fcde = caab[2..-1] }
+        } else {
+            ctg = bits[0]
+            fcde = bits[1]
+        }
+
+        out << "ctg=${ctg}&fcde=${fcde}"
+    }
 }

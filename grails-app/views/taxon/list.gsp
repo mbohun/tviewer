@@ -56,7 +56,7 @@
                     </g:if>
                     <!-- CAAB code -->
                     <g:if test="${i.caabCode}">
-                        <div><a href="http://www.marine.csiro.au/caabsearch/caab_search.family_listing?ctg=${i.caabCode.size() > 1 ? i.caabCode[0..1] : ''}&fcde=${i.caabCode.size() > 5 ? i.caabCode[4..5] : ''}"
+                        <div><a href="http://www.marine.csiro.au/caabsearch/caab_search.family_listing?${tv.splitFamilyCaab(caab:i.caabCode)}"
                                 class="external" title="Lookup CAAB code">${i.caabCode}</a></div>
                     </g:if>
                     <!-- image -->
