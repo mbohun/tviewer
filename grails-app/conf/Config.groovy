@@ -19,19 +19,19 @@ if(!grails.config.locations || !(grails.config.locations instanceof List)) {
 }
 reloadable.cfgs = ["file:/data/${appName}/config/${appName}-config.properties"]
 if(System.getenv(ENV_NAME) && new File(System.getenv(ENV_NAME)).exists()) {
-    println "Including configuration file specified in environment: " + System.getenv(ENV_NAME);
+    println "[TVIEWER] Including configuration file specified in environment: " + System.getenv(ENV_NAME);
     grails.config.locations = ["file:" + System.getenv(ENV_NAME)]
 } else if(System.getProperty(ENV_NAME) && new File(System.getProperty(ENV_NAME)).exists()) {
-    println "Including configuration file specified on command line: " + System.getProperty(ENV_NAME);
+    println "[TVIEWER] Including configuration file specified on command line: " + System.getProperty(ENV_NAME);
     grails.config.locations = ["file:" + System.getProperty(ENV_NAME)]
 } else if(new File(default_config).exists()) {
-    println "Including default configuration file: " + default_config;
+    println "[TVIEWER] Including default configuration file: " + default_config;
     def loc = ["file:" + default_config]
-    println ">> loc = " + loc
+    println "[TVIEWER] >> loc = " + loc
     grails.config.locations = loc
-    println "grails.config.locations = " + grails.config.locations
+    println "[TVIEWER] grails.config.locations = " + grails.config.locations
 } else {
-    println "No external configuration file defined."
+    println "[TVIEWER] No external configuration file defined."
 }
 
 
