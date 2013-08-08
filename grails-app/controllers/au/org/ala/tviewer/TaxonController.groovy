@@ -356,9 +356,9 @@ class TaxonController {
                 results.taxa << bieLookup(it.label, targetRank)
             }
         } catch (SocketTimeoutException e) {
-            println "Timed out searching. URL= \${url}."
+            log.error("Timed out searching. URL= \${url}.",e)
         } catch (Exception e) {
-            println "Failed search. ${e.getClass()} ${e.getMessage()} URL= ${url}."
+            log.error("Failed search. ${e.getClass()} ${e.getMessage()} URL= ${url}.",e)
         }
         return results
     }
@@ -394,7 +394,7 @@ class TaxonController {
                                 rights: null]
                     }
                 } catch (Exception e) {
-                    println e
+                    log.error(e.getMessage(),e)
                 }
             }
         }
@@ -435,10 +435,8 @@ class TaxonController {
                 }
             } catch (SocketTimeoutException e) {
                 log.warn "Timed out looking up taxon breakdown. URL= ${url}."
-                println "Timed out looking up taxon breakdown."
             } catch (Exception e) {
                 log.warn "Failed to lookup taxon breakdown. ${e.getClass()} ${e.getMessage()} URL= ${url}."
-                println "Failed to lookup taxon breakdown. ${e.getClass()} ${e.getMessage()} URL= ${url}."
             }
         }
         return results
@@ -500,7 +498,7 @@ class TaxonController {
                         //println image
                     }
                 } catch (Exception e) {
-                    println e
+                    log.error(e.getMessage(),e)
                 }
             }
 
@@ -512,11 +510,9 @@ class TaxonController {
                 return null
             }
         } catch (SocketTimeoutException e) {
-            log.warn "Timed out looking up taxon image. URL= ${url}."
-            println "Timed out looking up taxon image."
+            log.error("Timed out looking up taxon image. URL= ${url}.",e)
         } catch (Exception e) {
-            log.warn "Failed to lookup taxon image. ${e.getClass()} ${e.getMessage()} URL= ${url}."
-            println "Failed to lookup taxon image. ${e.getClass()} ${e.getMessage()} URL= ${url}."
+            log.error("Failed to lookup taxon image. ${e.getClass()} ${e.getMessage()} URL= ${url}.",e)
         }
     }
 

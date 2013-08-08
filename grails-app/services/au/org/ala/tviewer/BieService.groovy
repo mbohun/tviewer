@@ -32,7 +32,7 @@ class BieService {
                     gen.common = genData.common
                 }
                 else {
-                    println "No metadata found for genus ${gen.name} (guid = ${gen.guid})"
+                    log.debug "No metadata found for genus ${gen.name} (guid = ${gen.guid})"
                 }
                 def sppData = md[gen.repSppGuid]
                 if (sppData) {
@@ -42,7 +42,7 @@ class BieService {
                     }
                 }
                 else {
-                    println "No image found for genus ${gen.name} (guid = ${gen.guid})"
+                    log.debug "No image found for genus ${gen.name} (guid = ${gen.guid})"
                 }
             }
         }
@@ -74,7 +74,7 @@ class BieService {
                 }
             }
             else {
-                println "No metadata found for species ${sp.name} (guid = ${sp.guid})"
+                log.debug "No metadata found for species ${sp.name} (guid = ${sp.guid})"
             }
         }
 

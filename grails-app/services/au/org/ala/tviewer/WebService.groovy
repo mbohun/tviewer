@@ -17,11 +17,11 @@ class WebService {
             return conn.content.text
         } catch (SocketTimeoutException e) {
             def error = [error: "Timed out calling web service. URL= \${url}."]
-            println error.error
+            log.error(error.error,e)
             return error as JSON 
         } catch (Exception e) {
             def error = [error: "Failed calling web service. ${e.getClass()} ${e.getMessage()} URL= ${url}."]
-            println error.error
+            log.error(error.error,e)
             return error as JSON
         }
     }
@@ -35,15 +35,15 @@ class WebService {
             return JSON.parse(json)
         } catch (ConverterException e) {
             def error = ['error': "Failed to parse json. ${e.getClass()} ${e.getMessage()} URL= ${url}."]
-            println error.error
+            log.error(error.error,e)
             return error
         } catch (SocketTimeoutException e) {
             def error = [error: "Timed out getting json. URL= \${url}."]
-            println error.error
+            log.error(error.error,e)
             return error
         } catch (Exception e) {
             def error = [error: "Failed to get json from web service. ${e.getClass()} ${e.getMessage()} URL= ${url}."]
-            println error.error
+            log.error(error.error,e)
             return error
         }
     }
@@ -69,7 +69,7 @@ class WebService {
 
             response.failure = { resp ->
                 def error = [error: "Unexpected error: ${resp.statusLine.statusCode} : ${resp.statusLine.reasonPhrase}"]
-                println error.error
+                log.error(error.error,e)
                 return error
             }
         }
@@ -94,11 +94,11 @@ class WebService {
             return [error:  null, resp: JSON.parse(resp)]
         } catch (SocketTimeoutException e) {
             def error = [error: "Timed out calling web service. URL= \${url}."]
-            println error.error
+            log.error(error.error,e)
             return error as JSON
         } catch (Exception e) {
             def error = [error: "Failed calling web service. ${e.getClass()} ${e.getMessage()} ${e} URL= ${url}."]
-            println error.error
+            log.error(error.error,e)
             return error as JSON
         }
     }
