@@ -103,7 +103,7 @@
     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
     document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
-<r:script>
+<script>
     var pageTracker = _gat._getTracker("UA-4355440-1");
     pageTracker._initData();
     pageTracker._trackPageview();
@@ -113,8 +113,7 @@
         $('#header').prepend($('<div style="text-align:center;color:red;">WARNING: This page is not compatible with IE6.' +
                 ' Many functions will still work but layout and image transparency will be disrupted.</div>'));
     }
-</r:script>
-
+</script>
 <r:layoutResources/>
 </body>
 </html>
