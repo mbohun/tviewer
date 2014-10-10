@@ -13,19 +13,23 @@ before_install:
 - source ~/.gvm/bin/gvm-init.sh
 - GRAILS_VERSION=`grep '^\s*app.grails.version' application.properties | sed -e 's/^\s*app\.grails\.version=//g'
   | tr -d "\r"`
+- echo "GRAILS_VERSION:$GRAILS_VERSION"
 - gvm install grails $GRAILS_VERSION || true
 before_script:
 - GRAILS_VERSION_NUMBER=`echo $GRAILS_VERSION | sed -e 's/\.[0-9]*$//g' -e 's/\.//g'`
+- echo "GRAILS_VERSION_NUMBER:$GRAILS_VERSION_NUMBER"
 - GRAILS_SETTINGS_FILE="travis_grails_settings_new.groovy"
 - if [ "$GRAILS_VERSION_NUMBER" -lt "23" ]; then GRAILS_SETTINGS_FILE="travis_grails_settings_old.groovy";
   fi;
+- echo "GRAILS_SETTINGS_FILE:$GRAILS_SETTINGS_FILE"
 - mkdir -p ~/.grails; wget -q -O ~/.grails/settings.groovy https://raw.githubusercontent.com/AtlasOfLivingAustralia/travis-build-configuration/master/$GRAILS_SETTINGS_FILE
 - MAVEN_REPO="ala-repo-snapshot"
 - grep '^\s*app\.version=' ./application.properties | grep -q "\-SNAPSHOT"; if [ "$?"
   = "1" ]; then MAVEN_REPO="ala-repo-release"; fi;
+- echo "MAVEN_REPO:$MAVEN_REPO"
 script: grails clean && grails refresh-dependencies --non-interactive && grails prod
   war --non-interactive && grails prod maven-deploy --repository=$MAVEN_REPO --non-interactive
 env:
   global:
-  - secure: hqLfzYYhgGpVH0Tc3q355XWzx01C3yNFdmjqQ/btVkYA+LwoXSMF3rZHpFPqx5vJkqFkydF+ddMmn/QCllRVXFlfap1ivFbnS9e8EFJyAJCRr7plstz91EdumohqSHle1L/9tF3JJebOwI5WBTr7NOHcpDQl1kqdtHeLhrZCUxA=
-  - secure: B+nMAtsdEY23njAm9qQfq4/Wab0QlfZcqNujNlriJOIfEkU8LErkZej5kVLAYe8pJGQOzRZTyIxOHVTMibQl7Gc88caoGyMg8431ez9jp1vdy68cRk7Dn77XsSUhXoccn/W2VRbSSZph8VXWpF1Rm1Iqfz94Fl58oV0p9cENHiU=
+  - secure: j6RvqaQOYGWUNhJJb8VQOhLErCEo6yxqo02zRRzyCWMTHBQrLNwbMCn7aXMUXw7EydLvF89TZa76kgdNtpyXIcNSSfqj5LohZgTHAFAK482BkRe9dz44/qkep8/J/Kv0VvLNdNAQN+9JisdO+X62FmINRk4Z0oUrBie2ipPS5X0=
+  - secure: pl7MdWfN8/y8XOkxfbK9clH1u0SRFeYOKrjQ9KFKBhUvxt8nq/Jv9upQ9ikPQUglB+QMU/ZrLQSKc/yS6oEdDi0tZmHqHm8gNwBzy09/K0SswTGLERTNZop7gEqYi3QBVUrl7y/udt944Rg8g5hX6LNGiK9GSe+PT4F7zlkI0ZU=
