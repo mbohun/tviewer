@@ -31,5 +31,5 @@ script: grails clean && grails refresh-dependencies --non-interactive && grails 
   war --non-interactive && grails prod maven-deploy --repository=$MAVEN_REPO --non-interactive
 env:
   global:
-  - secure: j6RvqaQOYGWUNhJJb8VQOhLErCEo6yxqo02zRRzyCWMTHBQrLNwbMCn7aXMUXw7EydLvF89TZa76kgdNtpyXIcNSSfqj5LohZgTHAFAK482BkRe9dz44/qkep8/J/Kv0VvLNdNAQN+9JisdO+X62FmINRk4Z0oUrBie2ipPS5X0=
-  - secure: pl7MdWfN8/y8XOkxfbK9clH1u0SRFeYOKrjQ9KFKBhUvxt8nq/Jv9upQ9ikPQUglB+QMU/ZrLQSKc/yS6oEdDi0tZmHqHm8gNwBzy09/K0SswTGLERTNZop7gEqYi3QBVUrl7y/udt944Rg8g5hX6LNGiK9GSe+PT4F7zlkI0ZU=
+  - secure: XyNHK4Pgt4CCsPpqA+wnkJT+p5xN2rLCbxTYdj4J34k8INQa4sirLkaSqsFB7pA1H9NbWAW9OrhGfJPno3ob5Xn/tuIuiPcq2DLIg/5EoChSQD3k/ygWvKj4IviJ1J1hqBn8T3UvZ8Y1BcriQKgb6WyJyLn0qUGKYOGiAdP8zj4=
+  - secure: FGUvfoZxdiDN8P5ONRvNnQ0OXxYceczRDKFuCfjSqyNknEkII4qg+X0h/HHC3GlVhhYlliqB5ixaRHeIpHOlHTOYIlnUmHmgJ6LtLBn6qz3RyL+zelwWimSG8PqMIVAx2wsdTCglABjPhQRxuKPxT7f/MQg1OysXT4E98EY2qxA=
